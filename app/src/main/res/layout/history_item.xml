@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+    android:layout_marginBottom="@dimen/nav_header_vertical_spacing">
+    <TextView
+        android:id="@+id/history_item_steps_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text="1234 steps"/>
+
+    <TextView
+        android:id="@+id/history_item_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="Date: today at 12am"/>
+
+</LinearLayout>

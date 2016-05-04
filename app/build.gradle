@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.fitaleks.walkwithme"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField "String", "FIREBAE_SERVER_URL", "\"https://boiling-inferno-3565.firebaseio.com\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+ext {
+    schematicVersion = '0.6.7'
+    supportLibVer = '23.3.0'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:appcompat-v7:$supportLibVer"
+    compile "com.android.support:preference-v7:$supportLibVer"
+    compile "com.android.support:preference-v14:$supportLibVer"
+    compile "com.android.support:design:$supportLibVer"
+    compile "com.android.support:recyclerview-v7:$supportLibVer"
+
+    apt "net.simonvt.schematic:schematic-compiler:$schematicVersion"
+    compile "net.simonvt.schematic:schematic:$schematicVersion"
+
+    compile 'com.firebase:firebase-client-android:2.5.2+'
+
+}

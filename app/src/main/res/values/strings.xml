@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">WalkWithMe</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_item_today">Today</string>
+    <string name="nav_item_history">History</string>
+    <string name="nav_item_friends">Friends</string>
+    <string name="nav_item_settings">Preferences</string>
+
+    <string name="step_counter_title">Step count %1$d</string>
+
+    <string name="pref_name_title">Your name</string>
+    <string name="pref_name_key" translatable="false">pref_name</string>
+    <string name="pref_name_summary">Your nickname can help your friends to find you</string>
+
+    <string name="pref_enable_tracking_location_label">Allow tracking location</string>
+    <string name="pref_enable_tracking_location_key" translatable="false">enable_location_tracking</string>
+    <string name="pref_enable_tracking_location_false">Enabled</string>
+    <string name="pref_enable_tracking_location_true">Not enabled</string>
+    <string name="pref_enable_tracking_location_default" translatable="false">false</string>
+
+    <string name="pref_enable_sharing_label">Allow share your info</string>
+    <string name="pref_enable_sharing_key" translatable="false">enable_sharing</string>
+    <string name="pref_enable_sharing_false">Enabled</string>
+    <string name="pref_enable_sharing_true">Not enabled</string>
+    <string name="pref_enable_sharing_default" translatable="false">false</string>
+
+    <string name="pref_enable_sharing_location_label">Allow sharing location</string>
+    <string name="pref_enable_sharing_location_key" translatable="false">enable_sharing_location</string>
+    <string name="pref_enable_sharing_location_false">Enabled</string>
+    <string name="pref_enable_sharing_location_true">Not enabled</string>
+    <string name="pref_enable_sharing_location_default" translatable="false">false</string>
+</resources>
