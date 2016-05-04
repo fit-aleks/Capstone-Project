@@ -12,7 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "String", "FIREBAE_SERVER_URL", "\"https://boiling-inferno-3565.firebaseio.com\""
+        buildConfigField "String", "FIREBAE_SERVER_URL", apiKeys.firebaseServer
     }
     buildTypes {
         release {
