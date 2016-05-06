@@ -13,8 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fitaleks.walkwithme.database.FitnessHistory;
-import com.fitaleks.walkwithme.database.WalkWithMeProvider;
+import com.fitaleks.walkwithme.adapters.HistoryTodayAdapter;
+import com.fitaleks.walkwithme.data.database.FitnessHistory;
+import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 
 /**
  * Created by alexanderkulikovskiy on 03.05.16.

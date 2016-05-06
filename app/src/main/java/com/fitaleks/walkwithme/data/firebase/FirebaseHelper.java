@@ -1,4 +1,4 @@
-package com.fitaleks.walkwithme.firebase;
+package com.fitaleks.walkwithme.data.firebase;
 
 import android.text.TextUtils;
 

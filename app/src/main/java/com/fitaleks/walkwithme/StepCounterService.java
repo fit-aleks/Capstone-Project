@@ -1,6 +1,5 @@
 package com.fitaleks.walkwithme;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -18,10 +17,9 @@ import android.os.Message;
 import android.os.Process;
 import android.support.annotation.Nullable;
 
-import com.firebase.client.annotations.NotNull;
-import com.fitaleks.walkwithme.database.FitnessHistory;
-import com.fitaleks.walkwithme.database.WalkWithMeProvider;
-import com.fitaleks.walkwithme.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.data.database.FitnessHistory;
+import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
+import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 
 import java.util.HashMap;
 
@@ -187,9 +185,8 @@ public class StepCounterService extends Service {
                 return;
             }
             final FirebaseHelper helper = new FirebaseHelper.Builder()
-                    .addChild("users")
-                    .addChild("alex")
                     .addChild("steps")
+                    .addChild("alex")
                     .build();
             final HashMap<String, String> steps = new HashMap<>();
             for (int i = 0; i < cursor.getCount(); ++i) {

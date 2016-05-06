@@ -38,8 +38,8 @@
         <service android:name=".StepCounterService"/>
 
         <provider
-            android:authorities="com.fitaleks.walkwithme.database.WalkWithMeProvider"
-            android:name="com.fitaleks.walkwithme.provider.WalkWithMeProvider"
+            android:authorities="com.fitaleks.walkwithme.data.database.WalkWithMeProvider"
+            android:name="com.fitaleks.walkwithme.data.provider.WalkWithMeProvider"
             android:exported="false"/>
     </application>
 

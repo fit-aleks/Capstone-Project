@@ -1,4 +1,4 @@
-package com.fitaleks.walkwithme;
+package com.fitaleks.walkwithme.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fitaleks.walkwithme.database.FitnessHistory;
+import com.fitaleks.walkwithme.R;
+import com.fitaleks.walkwithme.data.database.FitnessHistory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

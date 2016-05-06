@@ -1,4 +1,4 @@
-package com.fitaleks.walkwithme.database;
+package com.fitaleks.walkwithme.data.database;
 
 import android.content.ContentValues;
 import android.net.Uri;
@@ -8,20 +8,20 @@ import net.simonvt.schematic.annotation.ContentUri;
 import net.simonvt.schematic.annotation.InexactContentUri;
 import net.simonvt.schematic.annotation.NotifyInsert;
 import net.simonvt.schematic.annotation.TableEndpoint;
-import net.simonvt.schematic.annotation.Where;
 
 /**
  * Created by alexanderkulikovskiy on 23.04.16.
  */
 @ContentProvider(authority = WalkWithMeProvider.AUTHORITY,
         database = WalkWithMeDatabase.class,
-        packageName = "com.fitaleks.walkwithme.provider")
+        packageName = "com.fitaleks.walkwithme.data.provider")
 public final class WalkWithMeProvider {
-    public static final String AUTHORITY = "com.fitaleks.walkwithme.database.WalkWithMeProvider";
+    public static final String AUTHORITY = "com.fitaleks.walkwithme.data.database.WalkWithMeProvider";
     static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     interface Path {
         String HISTORY = "history";
+        String FRIENDS = "friends";
     }
 
     private static Uri buildUri(String... paths) {
@@ -51,22 +51,25 @@ public final class WalkWithMeProvider {
             return buildUri(Path.HISTORY, Long.toString(id));
         }
 
-//        @InexactContentUri(
-//                name = "HISTORY_BY_DAY",
-//                path = Path.HISTORY + "/#/#",
-//                type = "vnd.android.cursor.dir/list",
-//                whereColumn = {},
-//                pathSegment = {},
-//                where = FitnessHistory.DATE + " > " + )
-//        public static Uri betweenDates(long firstDate, long lastDate) {
-//            return buildUri(Path.HISTORY, Long.toString(firstDate), Long.toString(lastDate));
-//        }
-
         @NotifyInsert(paths = Path.HISTORY)
         public static Uri[] onInsert(ContentValues values) {
             return new Uri[]{};
         }
 
+    }
 
+    @TableEndpoint(table = WalkWithMeDatabase.FREINDS)
+    public static class FriendsTable {
+        @ContentUri(
+                path = Path.FRIENDS,
+                type = "vnd.android.cursor.dir/list",
+                defaultSort = Friends.FRIEND_NAME + " DESC"
+        )
+        public static final Uri CONTENT_URI = buildUri(Path.FRIENDS);
+
+        @NotifyInsert(paths = Path.FRIENDS)
+        public static Uri[] onInsert(ContentValues values) {
+            return new Uri[]{};
+        }
     }
 }

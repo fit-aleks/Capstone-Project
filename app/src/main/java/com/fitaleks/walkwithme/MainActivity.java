@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity
                     .commit();
             // Show all history
         } else if (id == R.id.nav_friends) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, new FriendsFragment())
+                    .commit();
             // Show today's friends
         } else if (id == R.id.nav_manage) {
             getSupportFragmentManager()

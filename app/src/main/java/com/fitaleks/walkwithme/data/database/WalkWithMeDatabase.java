@@ -1,14 +1,13 @@
-package com.fitaleks.walkwithme.database;
+package com.fitaleks.walkwithme.data.database;
 
 import net.simonvt.schematic.annotation.Database;
 import net.simonvt.schematic.annotation.Table;
-import net.simonvt.schematic.annotation.TableEndpoint;
 
 /**
  * Created by alexanderkulikovskiy on 23.04.16.
  */
 @Database(version = WalkWithMeDatabase.VERSION,
-    packageName = "com.fitaleks.walkwithme.provider")
+    packageName = "com.fitaleks.walkwithme.data.provider")
 public final class WalkWithMeDatabase {
     private WalkWithMeDatabase(){}
 
@@ -16,5 +15,7 @@ public final class WalkWithMeDatabase {
 
     @Table(FitnessHistory.class)
     public static final String HISTORY = "history";
+    @Table(Friends.class)
+    public static final String FREINDS = "friends";
 
 }
