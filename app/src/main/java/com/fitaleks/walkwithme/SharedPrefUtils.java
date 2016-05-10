@@ -3,6 +3,7 @@ package com.fitaleks.walkwithme;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.ArraySet;
 
 import java.text.SimpleDateFormat;
@@ -17,4 +18,9 @@ import java.util.Set;
  */
 public class SharedPrefUtils {
 
+    @NonNull
+    public static String getUserName(@NonNull final Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_name_key), "");
+    }
 }

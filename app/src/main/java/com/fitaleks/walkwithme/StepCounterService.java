@@ -2,6 +2,7 @@ package com.fitaleks.walkwithme;
 
 import android.app.Service;
 import android.content.ContentValues;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -184,9 +185,13 @@ public class StepCounterService extends Service {
             if (cursor == null || !cursor.moveToFirst()) {
                 return;
             }
+            final String userName = SharedPrefUtils.getUserName(getApplicationContext());
+            if (userName.equals("")) {
+                return;
+            }
             final FirebaseHelper helper = new FirebaseHelper.Builder()
                     .addChild("steps")
-                    .addChild("alex")
+                    .addChild(userName)
                     .build();
             final HashMap<String, String> steps = new HashMap<>();
             for (int i = 0; i < cursor.getCount(); ++i) {
