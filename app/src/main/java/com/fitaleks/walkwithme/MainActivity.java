@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,26 +14,9 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    // State of application, used to register for sensors when app is restored
-    private static final int STATE_OTHER = 0;
-    public static final int STATE_COUNTER = 1;
-
-    // Number of events to keep in queue and display on card
-    private static final int EVENT_QUEUE_LENGTH = 10;
-
-    private float[] mEventDelays = new float[EVENT_QUEUE_LENGTH];
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
-
-
-    // number of events in event list
-    private int mEventLength = 0;
-    // pointer to next entry in sensor event list
-    private int mEventData = 0;
-    // State of the app (STATE_OTHER, STATE_COUNTER or STATE_DETECTOR)
-    private int mState = STATE_OTHER;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +24,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        final TextView textView = (TextView) findViewById(R.id.main_text);
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -53,14 +34,13 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
+            navigationView.getMenu().performIdentifierAction(R.id.nav_me, 0);
         }
-
 
         if (!isServiceRunning()) {
             final Intent startStepService = new Intent(this, StepCounterService.class);
             startService(startStepService);
         }
-//        textView.setText(String.format(Locale.getDefault(), "Инфа из SharedPreferences, куда должен был бы положить их сервис. Шагов за сегодня: %d\nСервис запущен: %b", mPreviousCounterSteps, isServiceRunning()));
 
     }
 
@@ -93,32 +73,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
+        final int id = item.getItemId();
+        Fragment newFragment = null;
         if (id == R.id.nav_me) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, new TodayFragment())
-                    .commit();
-            // Show today
+            newFragment = new TodayFragment(); // Show today
         } else if (id == R.id.nav_history) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, new HistoryFragment())
-                    .commit();
-            // Show all history
+            newFragment = new HistoryFragment(); // Show all history
         } else if (id == R.id.nav_friends) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, new FriendsFragment())
-                    .commit();
-            // Show today's friends
+            newFragment = new FriendsFragment(); // Show today's friends
         } else if (id == R.id.nav_manage) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, new SettingsFragment())
-                    .commit();
+            newFragment = new SettingsFragment();
         }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, newFragment)
+                .commit();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
