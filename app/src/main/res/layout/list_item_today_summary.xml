@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
     android:baselineAligned="false"
     android:orientation="vertical">
@@ -13,9 +14,18 @@
         android:src="@drawable/shoe_mine" />
 
     <TextView
+        android:id="@+id/history_item_steps_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/step_counter_title"
         android:textAppearance="?android:textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/history_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textAppearance="?android:textAppearanceMedium"
+        tools:text="Today"/>
 </LinearLayout>

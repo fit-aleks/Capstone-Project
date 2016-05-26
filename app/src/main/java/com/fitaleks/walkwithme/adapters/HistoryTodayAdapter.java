@@ -20,6 +20,9 @@ import java.util.Locale;
  */
 public class HistoryTodayAdapter extends RecyclerView.Adapter<HistoryTodayAdapter.TodayViewHolder> {
 
+    private final int VIEW_TYPE_TODAY = 0;
+    private final int VIEW_TYPE_HISTORY = 1;
+
     private Cursor cursor;
     public HistoryTodayAdapter(Cursor cursor) {
         this.cursor = cursor;
@@ -38,8 +41,12 @@ public class HistoryTodayAdapter extends RecyclerView.Adapter<HistoryTodayAdapte
 
     @Override
     public TodayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rootView = inflater.inflate(R.layout.history_item, parent, false);
+        if (!(parent instanceof RecyclerView )) {
+            throw new RuntimeException("Not bound to RecyclerViewSelection");
+        }
+        final int layoutId = (viewType == VIEW_TYPE_TODAY) ? R.layout.list_item_today_summary : R.layout.history_item;
+        final View rootView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        rootView.setFocusable(true);
         return new TodayViewHolder(rootView);
     }
 
@@ -50,6 +57,11 @@ public class HistoryTodayAdapter extends RecyclerView.Adapter<HistoryTodayAdapte
         final SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy kk:mm:ss", Locale.getDefault());
         final Date dateOfActivity = new Date(cursor.getLong(cursor.getColumnIndex(FitnessHistory.DATE)));
         holder.dateTextView.setText(format.format(dateOfActivity));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? VIEW_TYPE_TODAY : VIEW_TYPE_HISTORY;
     }
 
     public void swapCursor(Cursor cursor) {

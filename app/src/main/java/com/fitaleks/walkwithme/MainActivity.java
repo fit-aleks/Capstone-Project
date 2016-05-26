@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
-            navigationView.getMenu().performIdentifierAction(R.id.nav_me, 0);
+            navigationView.getMenu().performIdentifierAction(R.id.nav_history, 0);
         }
 
         if (!isServiceRunning()) {
@@ -69,15 +69,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+//    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
         Fragment newFragment = null;
-        if (id == R.id.nav_me) {
-            newFragment = new TodayFragment(); // Show today
-        } else if (id == R.id.nav_history) {
+        if (id == R.id.nav_history) {
             newFragment = new HistoryFragment(); // Show all history
         } else if (id == R.id.nav_friends) {
             newFragment = new FriendsFragment(); // Show today's friends

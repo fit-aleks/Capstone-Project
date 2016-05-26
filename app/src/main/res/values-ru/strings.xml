@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WalkWithMe</string>
+    <string name="nav_item_friends">Друзья</string>
+    <string name="nav_item_history">История</string>
+    <string name="nav_item_settings">Настройки</string>
+    <string name="nav_item_today">Сегодня</string>
+    <string name="pref_enable_sharing_false">Разрешено</string>
+    <string name="pref_enable_sharing_label">Разрешить делиться вашей информацией</string>
+    <string name="pref_enable_sharing_location_false">Разрешено</string>
+    <string name="pref_enable_sharing_location_label">Разрешить делиться вашей геолокацией</string>
+    <string name="pref_enable_sharing_location_true">Не разрешено</string>
+    <string name="pref_enable_sharing_true">Не разрешено</string>
+    <string name="pref_enable_tracking_location_false">Разрешено</string>
+    <string name="pref_enable_tracking_location_label">Разрешить отслеживать местоположение</string>
+    <string name="pref_enable_tracking_location_true">Не разрешено</string>
+    <string name="pref_name_summary">Имя пользователя по которому Вас можно будет найти</string>
+    <string name="pref_name_title">Ваше имя</string>
+    <string name="step_counter_title">Количество шагов %1$d</string>
+</resources>
