@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECIEVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <!-- Require the step counter and step detector sensors.
         See the method BatchStepSensorFragment#isKitkatWithStepSensor() for a programmatic check if

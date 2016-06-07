@@ -15,4 +15,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         findPreference(getString(R.string.pref_name_key));
     }
+
+
 }
