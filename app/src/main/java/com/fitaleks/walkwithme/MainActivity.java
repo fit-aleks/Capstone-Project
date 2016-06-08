@@ -12,7 +12,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,13 +28,9 @@ import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
@@ -51,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     private TextView navNameTextView;
 
     /* Client used to interact with Google APIs. */
-    GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
     /* Request code used to invoke sign in user interactions for Google+ */
     public static final int RC_GOOGLE_LOGIN = 1;
 
@@ -81,8 +76,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-
 
         mAuthProgressDialog = new ProgressDialog(this);
         /* Setup the Google API object to allow Google+ logins */
@@ -294,7 +287,6 @@ public class MainActivity extends AppCompatActivity
                 navNameTextView.setText(name + " (" + authData.getProvider() + ")");
             }
         }
-//        this.mAuthData = authData;
     }
 
     /**

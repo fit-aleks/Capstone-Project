@@ -51,6 +51,13 @@ public final class WalkWithMeProvider {
             return buildUri(Path.HISTORY, Long.toString(id));
         }
 
+        @ContentUri(
+                path = Path.HISTORY + "/by_days",
+                type = "vnd.android.cursor.dir/list",
+                groupBy = "strftime('%d-%m-%Y', " + FitnessHistory.DATE +"/1000, 'unixepoch')"
+        )
+        public static final Uri BY_DAYS_URI = buildUri(Path.HISTORY, "by_days");
+
         @NotifyInsert(paths = Path.HISTORY)
         public static Uri[] onInsert(ContentValues values) {
             return new Uri[]{};

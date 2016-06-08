@@ -1,6 +1,5 @@
 package com.fitaleks.walkwithme.adapters;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.fitaleks.walkwithme.HistoryFragment;
 import com.fitaleks.walkwithme.R;
-import com.fitaleks.walkwithme.data.database.FitnessHistory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,9 +52,9 @@ public class HistoryTodayAdapter extends RecyclerView.Adapter<HistoryTodayAdapte
     @Override
     public void onBindViewHolder(TodayViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.stepsCountTextView.setText(holder.stepsCountTextView.getContext().getString(R.string.step_counter_title, cursor.getInt(cursor.getColumnIndex(FitnessHistory.NUM_OF_STEPS))));
-        final SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy kk:mm:ss", Locale.getDefault());
-        final Date dateOfActivity = new Date(cursor.getLong(cursor.getColumnIndex(FitnessHistory.DATE)));
+        holder.stepsCountTextView.setText(holder.stepsCountTextView.getContext().getString(R.string.step_counter_title, cursor.getInt(HistoryFragment.COL_NUMBER_OF_STEPS)));
+        final SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        final Date dateOfActivity = new Date(cursor.getLong(HistoryFragment.COL_DATE));
         holder.dateTextView.setText(format.format(dateOfActivity));
     }
 

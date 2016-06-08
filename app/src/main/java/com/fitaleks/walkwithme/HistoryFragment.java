@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.fitaleks.walkwithme.adapters.HistoryTodayAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
+import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 
 /**
@@ -24,6 +25,15 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     private HistoryTodayAdapter adapter;
     private static final int ALL_HISTORY_LOADER = 1;
 
+    private static final String[] HISTORY_BY_DAY_COLUMNS = {
+            WalkWithMeDatabase.HISTORY + "." + FitnessHistory.ID,
+            FitnessHistory.DATE,
+            "SUM("+ FitnessHistory.NUM_OF_STEPS +")",
+    };
+
+    public static final int COL_HISTORY_ID = 0;
+    public static final int COL_DATE = 1;
+    public static final int COL_NUMBER_OF_STEPS = 2;
 
     @Nullable
     @Override
@@ -51,8 +61,8 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getContext(),
-                WalkWithMeProvider.History.CONTENT_URI,
-                null,
+                WalkWithMeProvider.History.BY_DAYS_URI,
+                HISTORY_BY_DAY_COLUMNS,
                 null,
                 null,
                 FitnessHistory.DATE + " DESC ");
