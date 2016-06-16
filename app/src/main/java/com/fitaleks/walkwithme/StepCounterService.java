@@ -2,7 +2,6 @@ package com.fitaleks.walkwithme;
 
 import android.app.Service;
 import android.content.ContentValues;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -30,7 +29,7 @@ public class StepCounterService extends Service {
 
     public static final String TODAYS_DATE = "todaysdate";
 
-//    private SensorManager sensorManager;
+    //    private SensorManager sensorManager;
     private ServiceHandler serviceHandler;
 
     private int maxDelay = 0;
@@ -98,7 +97,7 @@ public class StepCounterService extends Service {
 
         public ServiceHandler(Looper looper) {
             super(looper);
-            mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             sensorStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         }
 
@@ -142,14 +141,14 @@ public class StepCounterService extends Service {
 
                 // Calculate steps taken based on first counter value received.
                 mSteps = (int) event.values[0] - mCounterSteps;
-                android.util.Log.d("StepCoutnerService", "numOfSteps = " + mSteps);
+                android.util.Log.d(LOG_TAG, "numOfSteps = " + mSteps);
 
                 // Add the number of steps previously taken, otherwise the counter would start at 0.
                 // This is needed to keep the counter consistent across rotation changes.
 //                mSteps += mPreviousCounterSteps;
                 final Cursor historyCursor = getContentResolver().query(WalkWithMeProvider.History.CONTENT_URI, null, null, null, FitnessHistory.DATE + " DESC LIMIT 1");
                 final ContentValues contentValues = new ContentValues();
-                android.util.Log.d("StepCoutnerService", "cursor = " + historyCursor + "numOfSteps = " + mSteps);
+                android.util.Log.d(LOG_TAG, "cursor = " + historyCursor + "numOfSteps = " + mSteps);
                 if (historyCursor != null && historyCursor.moveToNext() && mSteps > 0) {
 
                     final long timeOfPrevRecord = historyCursor.getLong(historyCursor.getColumnIndex(FitnessHistory.DATE));
@@ -158,15 +157,15 @@ public class StepCounterService extends Service {
                     contentValues.put(FitnessHistory.NUM_OF_STEPS, newNumOfSteps);
                     contentValues.put(FitnessHistory.DATE, System.currentTimeMillis());
                     if (System.currentTimeMillis() - timeOfPrevRecord < ONE_MINUTE_IN_MS) {
-                        android.util.Log.d("StepCoutnerService", "update = " + newNumOfSteps);
+                        android.util.Log.d(LOG_TAG, "update = " + newNumOfSteps);
                         getContentResolver().update(WalkWithMeProvider.History.CONTENT_URI, contentValues, FitnessHistory.DATE + " = " + timeOfPrevRecord, null);
                     } else {
-                        android.util.Log.d("StepCoutnerService", "insert1 = " + newNumOfSteps);
+                        android.util.Log.d(LOG_TAG, "insert1 = " + newNumOfSteps);
                         getContentResolver().insert(WalkWithMeProvider.History.CONTENT_URI, contentValues);
                     }
                     sendDataToFirebase();
                 } else if (mSteps > 0) {
-                    android.util.Log.d("StepCoutnerService", "insert2 = " + mSteps);
+                    android.util.Log.d(LOG_TAG, "insert2 = " + mSteps);
                     contentValues.put(FitnessHistory.NUM_OF_STEPS, mSteps);
                     contentValues.put(FitnessHistory.DATE, System.currentTimeMillis());
                     getContentResolver().insert(WalkWithMeProvider.History.CONTENT_URI, contentValues);
@@ -177,7 +176,6 @@ public class StepCounterService extends Service {
 
             }
 
-
         }
 
         private void sendDataToFirebase() {
@@ -186,12 +184,14 @@ public class StepCounterService extends Service {
                 return;
             }
             final String userName = SharedPrefUtils.getUserName(getApplicationContext());
-            if (userName.equals("")) {
+            final String userUid = SharedPrefUtils.getUserUid(getApplicationContext());
+            final boolean isSharingInfoEnabled = SharedPrefUtils.isUserSharingInfoEnabled(getApplicationContext());
+            if (!isSharingInfoEnabled || userName.equals("") || userUid.equals("")) {
                 return;
             }
-            final FirebaseHelper helper = new FirebaseHelper.Builder()
+            final FirebaseHelper stepsHelper = new FirebaseHelper.Builder()
                     .addChild("steps")
-                    .addChild(userName)
+                    .addChild(userUid)
                     .build();
             final HashMap<String, String> steps = new HashMap<>();
             for (int i = 0; i < cursor.getCount(); ++i) {
@@ -199,13 +199,20 @@ public class StepCounterService extends Service {
                         Long.toString(cursor.getLong(cursor.getColumnIndex(FitnessHistory.NUM_OF_STEPS))));
                 cursor.moveToNext();
             }
-            helper.getFirebase().setValue(steps);
+            stepsHelper.getFirebase().setValue(steps);
             cursor.close();
+
+            final FirebaseHelper userHelper = new FirebaseHelper.Builder()
+                    .addChild("users")
+                    .addChild(userUid)
+                    .build();
+            final HashMap<String, String> userInfo = new HashMap<>();
+            userInfo.put("displayName", userName);
+            userHelper.getFirebase().setValue(userInfo);
         }
 
         /**
-         *
-         * @param cursor - cursor from database with the most recent record of physical activity.
+         * @param cursor        - cursor from database with the most recent record of physical activity.
          * @param newStepsCount - possible new steps count before taking into account old user's activity.
          * @return new steps count, which is the result of taking into account his old activity.
          */

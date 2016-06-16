@@ -11,9 +11,9 @@
 
     <string name="step_counter_title">Step count %1$d</string>
 
-    <string name="pref_name_title">Your name</string>
     <string name="pref_name_key" translatable="false">pref_name</string>
-    <string name="pref_name_summary">Your nickname can help your friends to find you</string>
+    <string name="pref_uid_key" translatable="false">pref_uid</string>
+    <string name="pref_photo_key" translatable="false">pref_photo</string>
 
     <string name="pref_enable_tracking_location_label">Allow tracking location</string>
     <string name="pref_enable_tracking_location_key" translatable="false">enable_location_tracking</string>

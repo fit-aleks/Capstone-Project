@@ -19,12 +19,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -34,16 +37,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private TextView navNameTextView;
+    private ImageView navImageView;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient googleApiClient;
@@ -95,6 +97,18 @@ public class MainActivity extends AppCompatActivity
                 navigationHeader.setOnClickListener(onNavHeaderClickListener);
             }
             navNameTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_name);
+            navImageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.nav_image_view);
+            final String userName = SharedPrefUtils.getUserName(this);
+            final String userPhoto = SharedPrefUtils.getUserPhoto(this);
+            if (!userName.equals("")) {
+                navNameTextView.setText(userName);
+            }
+            if (!userPhoto.equals("")) {
+                Glide.with(this)
+                        .load(userPhoto)
+                        .bitmapTransform(new CropCircleTransformation(this))
+                        .into(navImageView);
+            }
         }
 
         if (!isServiceRunning()) {
@@ -147,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
+    //    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -278,15 +292,12 @@ public class MainActivity extends AppCompatActivity
     /**
      * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.
      */
-    private void setAuthenticatedUser(AuthData authData) {
-        if (authData != null) {
-            /* show a provider specific status text */
-            final String name = (String) authData.getProviderData().get("displayName");
-            if (name != null) {
-                Log.d(TAG, name + " (" + authData.getProvider() + ")");
-                navNameTextView.setText(name + " (" + authData.getProvider() + ")");
-            }
-        }
+    private void setAuthenticatedUser() {
+        navNameTextView.setText(SharedPrefUtils.getUserName(this));
+        Glide.with(this)
+                .load(SharedPrefUtils.getUserPhoto(this))
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(navImageView);
     }
 
     /**
@@ -304,14 +315,20 @@ public class MainActivity extends AppCompatActivity
         public void onAuthenticated(AuthData authData) {
             mAuthProgressDialog.dismiss();
             Log.i(TAG, provider + " auth successful");
-            setAuthenticatedUser(authData);
-            FirebaseHelper helper = new FirebaseHelper.Builder().addChild("users").build();
+            if (authData == null) {
+                return;
+            }
+            /*final FirebaseHelper helper = new FirebaseHelper.Builder().addChild("users").build();
             final Map<String, String> map = new HashMap<>();
             map.put("provider", authData.getProvider());
-            if(authData.getProviderData().containsKey("displayName")) {
+            if (authData.getProviderData().containsKey("displayName")) {
                 map.put("displayName", authData.getProviderData().get("displayName").toString());
             }
-            helper.getFirebase().child(authData.getUid()).setValue(map);
+            helper.getFirebase().child(authData.getUid()).setValue(map);*/
+            SharedPrefUtils.setUserName(MainActivity.this, authData.getProviderData().get("displayName").toString());
+            SharedPrefUtils.setUserUid(MainActivity.this, authData.getUid());
+            SharedPrefUtils.setUserPhoto(MainActivity.this, authData.getProviderData().get("profileImageURL").toString());
+            setAuthenticatedUser();
         }
 
         @Override
