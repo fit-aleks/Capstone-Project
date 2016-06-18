@@ -18,6 +18,7 @@ import android.os.Process;
 import android.support.annotation.Nullable;
 
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
+import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 
@@ -190,7 +191,7 @@ public class StepCounterService extends Service {
                 return;
             }
             final FirebaseHelper stepsHelper = new FirebaseHelper.Builder()
-                    .addChild("steps")
+                    .addChild(FirebaseHelper.KEY_STEPS)
                     .addChild(userUid)
                     .build();
             final HashMap<String, String> steps = new HashMap<>();
@@ -203,11 +204,13 @@ public class StepCounterService extends Service {
             cursor.close();
 
             final FirebaseHelper userHelper = new FirebaseHelper.Builder()
-                    .addChild("users")
+                    .addChild(FirebaseHelper.KEY_USERS)
                     .addChild(userUid)
                     .build();
             final HashMap<String, String> userInfo = new HashMap<>();
-            userInfo.put("displayName", userName);
+            userInfo.put(Friends.FRIEND_NAME, userName);
+            userInfo.put(Friends.PHOTO, SharedPrefUtils.getUserPhoto(getApplicationContext()));
+            userInfo.put(Friends.GOOGLE_USER_ID, userUid);
             userHelper.getFirebase().setValue(userInfo);
         }
 

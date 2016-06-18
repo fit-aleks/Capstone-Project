@@ -1,10 +1,13 @@
 package com.fitaleks.walkwithme;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.client.AuthData;
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity
     private GoogleApiClient googleApiClient;
     /* Request code used to invoke sign in user interactions for Google+ */
     public static final int RC_GOOGLE_LOGIN = 1;
+    // request code for requesting permission
+    private static final int RC_GET_ACCOUNTS = 42;
 
     /* A flag indicating that a PendingIntent is in progress and prevents us from starting further intents. */
     private boolean mGoogleIntentInProgress;
@@ -118,23 +124,56 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RC_GET_ACCOUNTS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loginToGoogle();
+            } else {
+                Toast.makeText(this, "Auth is not available without permission", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private View.OnClickListener onNavHeaderClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mGoogleLoginClicked = true;
-            if (!googleApiClient.isConnecting()) {
-                if (mGoogleConnectionResult != null) {
-                    resolveSignInError();
-                } else if (googleApiClient.isConnected()) {
-                    getGoogleOAuthTokenAndLogin();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                int permission = checkSelfPermission(Manifest.permission.GET_ACCOUNTS);
+                if (permission == PackageManager.PERMISSION_GRANTED) {
+                    loginToGoogle();
                 } else {
-                    // connect API now
-                    Log.d(TAG, "Trying to connect to Google API");
-                    googleApiClient.connect();
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.GET_ACCOUNTS)) {
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Need permission")
+                                .setMessage("To have an ability yo sync data")
+                                .show();
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.GET_ACCOUNTS}, RC_GET_ACCOUNTS);
+                    }
+
                 }
+            } else {
+                loginToGoogle();
             }
         }
     };
+
+    private void loginToGoogle() {
+        mGoogleLoginClicked = true;
+        if (!googleApiClient.isConnecting()) {
+            if (mGoogleConnectionResult != null) {
+                resolveSignInError();
+            } else if (googleApiClient.isConnected()) {
+                getGoogleOAuthTokenAndLogin();
+            } else {
+                // connect API now
+                Log.d(TAG, "Trying to connect to Google API");
+                googleApiClient.connect();
+            }
+        }
+    }
 
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -318,13 +357,6 @@ public class MainActivity extends AppCompatActivity
             if (authData == null) {
                 return;
             }
-            /*final FirebaseHelper helper = new FirebaseHelper.Builder().addChild("users").build();
-            final Map<String, String> map = new HashMap<>();
-            map.put("provider", authData.getProvider());
-            if (authData.getProviderData().containsKey("displayName")) {
-                map.put("displayName", authData.getProviderData().get("displayName").toString());
-            }
-            helper.getFirebase().child(authData.getUid()).setValue(map);*/
             SharedPrefUtils.setUserName(MainActivity.this, authData.getProviderData().get("displayName").toString());
             SharedPrefUtils.setUserUid(MainActivity.this, authData.getUid());
             SharedPrefUtils.setUserPhoto(MainActivity.this, authData.getProviderData().get("profileImageURL").toString());

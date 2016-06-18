@@ -64,6 +64,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                         .addChild(uid)
                         .build();
                 helper.getFirebase().setValue(null);
+            } else {
+
             }
         }
     }

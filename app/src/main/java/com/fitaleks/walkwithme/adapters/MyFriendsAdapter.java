@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.data.database.Friends;
+import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 
 /**
  * Created by alexanderkulikovskiy on 05.05.16.
@@ -23,9 +26,11 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
 
     static class FriendViewHolder extends RecyclerView.ViewHolder {
         TextView name;
+        ImageView photo;
         public FriendViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.list_item_name);
+            photo = (ImageView) itemView.findViewById(R.id.list_item_photo);
         }
     }
 
@@ -45,6 +50,11 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     public void onBindViewHolder(FriendViewHolder holder, int position) {
         cursor.moveToPosition(position);
         holder.name.setText(cursor.getString(cursor.getColumnIndex(Friends.FRIEND_NAME)));
+        Glide.with(holder.photo.getContext())
+                .load(cursor.getString(cursor.getColumnIndex(Friends.PHOTO)))
+                .bitmapTransform(new CropCircleTransformation(holder.photo.getContext()))
+                .placeholder(R.drawable.friend_photo_placeholder)
+                .into(holder.photo);
     }
 
     @Override

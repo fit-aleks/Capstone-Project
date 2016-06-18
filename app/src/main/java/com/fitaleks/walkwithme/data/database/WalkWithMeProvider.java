@@ -65,7 +65,7 @@ public final class WalkWithMeProvider {
 
     }
 
-    @TableEndpoint(table = WalkWithMeDatabase.FREINDS)
+    @TableEndpoint(table = WalkWithMeDatabase.FRIENDS)
     public static class FriendsTable {
         @ContentUri(
                 path = Path.FRIENDS,

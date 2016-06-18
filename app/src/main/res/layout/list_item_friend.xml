@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/list_item_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Some name of another person" />
-</LinearLayout>
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/list_item_content_horizontal_margin"
+        android:paddingLeft="@dimen/list_item_content_horizontal_margin"
+        android:paddingRight="@dimen/list_item_content_horizontal_margin"
+        android:paddingStart="@dimen/list_item_content_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/list_item_photo"
+            android:layout_width="@dimen/photo_list_size"
+            android:layout_height="@dimen/photo_list_size"
+            android:layout_marginBottom="@dimen/list_item_vertical_margin"
+            android:layout_marginTop="@dimen/list_item_vertical_margin"
+            tools:src="@drawable/friend_photo_placeholder" />
+
+        <TextView
+            android:id="@+id/list_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/list_item_content_horizontal_margin"
+            android:layout_marginStart="@dimen/list_item_content_horizontal_margin"
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="Some name of another person. It can be very very very long" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

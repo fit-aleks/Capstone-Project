@@ -17,19 +17,19 @@
 
     <string name="pref_enable_tracking_location_label">Allow tracking location</string>
     <string name="pref_enable_tracking_location_key" translatable="false">enable_location_tracking</string>
-    <string name="pref_enable_tracking_location_false">Enabled</string>
-    <string name="pref_enable_tracking_location_true">Not enabled</string>
+    <string name="pref_enable_tracking_location_false">Not enabled</string>
+    <string name="pref_enable_tracking_location_true">Enabled</string>
     <string name="pref_enable_tracking_location_default" translatable="false">false</string>
 
     <string name="pref_enable_sharing_label">Allow share your info</string>
     <string name="pref_enable_sharing_key" translatable="false">enable_sharing</string>
-    <string name="pref_enable_sharing_false">Enabled</string>
-    <string name="pref_enable_sharing_true">Not enabled</string>
+    <string name="pref_enable_sharing_false">Not enabled</string>
+    <string name="pref_enable_sharing_true">Enabled</string>
     <string name="pref_enable_sharing_default" translatable="false">false</string>
 
     <string name="pref_enable_sharing_location_label">Allow sharing location</string>
     <string name="pref_enable_sharing_location_key" translatable="false">enable_sharing_location</string>
-    <string name="pref_enable_sharing_location_false">Enabled</string>
-    <string name="pref_enable_sharing_location_true">Not enabled</string>
+    <string name="pref_enable_sharing_location_false">Not enabled</string>
+    <string name="pref_enable_sharing_location_true">Enabled</string>
     <string name="pref_enable_sharing_location_default" translatable="false">false</string>
 </resources>
