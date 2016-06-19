@@ -2,6 +2,7 @@ package com.fitaleks.walkwithme;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,7 +51,15 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
         });
 
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.friends_list);
-        adapter = new MyFriendsAdapter();
+        adapter = new MyFriendsAdapter(new MyFriendsAdapter.FriendsAdapterOnClickHandler() {
+            @Override
+            public void onClick(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
+                ((FriendsFragment.Callback)getActivity()).onItemSelected(
+                        WalkWithMeProvider.FriendsTable.withFriendGoogleId(googleId),
+                        viewHolder
+                );
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -122,5 +131,19 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoaderReset(Loader loader) {
         adapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     *
+     * Created by alex1101 on 28.08.14.
+     */
+    public interface Callback {
+        /**
+         * Callback for when an item has been selected.
+         */
+        void onItemSelected(Uri dateUri, MyFriendsAdapter.FriendViewHolder viewHolder);
     }
 }

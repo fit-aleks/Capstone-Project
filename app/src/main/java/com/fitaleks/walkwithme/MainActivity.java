@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,7 +32,9 @@ import com.bumptech.glide.Glide;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -42,8 +46,10 @@ import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        FriendsFragment.Callback {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout drawer;
@@ -368,5 +374,16 @@ public class MainActivity extends AppCompatActivity
             mAuthProgressDialog.dismiss();
             showErrorDialog(firebaseError.toString());
         }
+    }
+
+    @Override
+    public void onItemSelected(Uri dateUri, MyFriendsAdapter.FriendViewHolder viewHolder) {
+        //TODO: add two pane verison for tablets
+        Intent intent = new Intent(this, FriendsDetailsActivity.class)
+                .setData(dateUri);
+//        ActivityOptionsCompat activityOptions =
+//                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+//                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
+        ActivityCompat.startActivity(this, intent, null);
     }
 }

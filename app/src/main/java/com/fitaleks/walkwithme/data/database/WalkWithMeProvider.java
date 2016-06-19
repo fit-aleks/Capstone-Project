@@ -78,5 +78,15 @@ public final class WalkWithMeProvider {
         public static Uri[] onInsert(ContentValues values) {
             return new Uri[]{};
         }
+
+        @InexactContentUri(
+                name = "FRIEND_HISTORY",
+                path = Path.FRIENDS + "/*",
+                type = "vnd.adnroid.cursor.dir/item",
+                whereColumn = Friends.GOOGLE_USER_ID,
+                pathSegment = 1)
+        public static Uri withFriendGoogleId(final String friendsGoogleId) {
+            return buildUri(Path.FRIENDS, friendsGoogleId);
+        }
     }
 }

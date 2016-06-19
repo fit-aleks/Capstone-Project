@@ -30,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.friends.FriendsDetailsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <receiver android:name=".BootCompletedReceiver" android:enabled="true" android:exported="false">
             <intent-filter>

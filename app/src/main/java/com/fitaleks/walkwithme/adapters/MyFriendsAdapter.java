@@ -19,18 +19,27 @@ import com.fitaleks.walkwithme.utils.CropCircleTransformation;
  */
 public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.FriendViewHolder> {
     public Cursor cursor;
+    private FriendsAdapterOnClickHandler onClickHandler;
 
-    public MyFriendsAdapter() {
-
+    public MyFriendsAdapter(FriendsAdapterOnClickHandler clickHandler) {
+        this.onClickHandler = clickHandler;
     }
 
-    static class FriendViewHolder extends RecyclerView.ViewHolder {
+    public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
         ImageView photo;
         public FriendViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             name = (TextView) itemView.findViewById(R.id.list_item_name);
             photo = (ImageView) itemView.findViewById(R.id.list_item_photo);
+        }
+
+        @Override
+        public void onClick(View v) {
+            cursor.moveToPosition(getAdapterPosition());
+            final String googleId = cursor.getString(cursor.getColumnIndex(Friends.GOOGLE_USER_ID));
+            onClickHandler.onClick(googleId, this);
         }
     }
 
@@ -60,5 +69,9 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     @Override
     public int getItemCount() {
         return cursor != null ? cursor.getCount() : 0;
+    }
+
+    public interface FriendsAdapterOnClickHandler {
+        void onClick(String googleId, FriendViewHolder viewHolder);
     }
 }
