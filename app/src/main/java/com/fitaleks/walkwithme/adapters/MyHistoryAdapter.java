@@ -17,13 +17,13 @@ import java.util.Locale;
 /**
  * Created by alexanderkulikovskiy on 23.04.16.
  */
-public class HistoryTodayAdapter extends RecyclerView.Adapter<HistoryTodayAdapter.TodayViewHolder> {
+public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.TodayViewHolder> {
 
     private final int VIEW_TYPE_TODAY = 0;
     private final int VIEW_TYPE_HISTORY = 1;
 
     private Cursor cursor;
-    public HistoryTodayAdapter(Cursor cursor) {
+    public MyHistoryAdapter(Cursor cursor) {
         this.cursor = cursor;
     }
 

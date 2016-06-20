@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fitaleks.walkwithme.adapters.HistoryTodayAdapter;
+import com.fitaleks.walkwithme.adapters.MyHistoryAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 
@@ -28,7 +28,7 @@ import java.util.Calendar;
 public class TodayFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private int LOADER_TODAY_HISTORY = 0;
 
-    private HistoryTodayAdapter adapter;
+    private MyHistoryAdapter adapter;
 
     @Nullable
     @Override
@@ -36,7 +36,7 @@ public class TodayFragment extends Fragment implements LoaderManager.LoaderCallb
         final View rootView = inflater.inflate(R.layout.content_main, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.today_history_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new HistoryTodayAdapter(null);
+        adapter = new MyHistoryAdapter(null);
         recyclerView.setAdapter(adapter);
 
         return rootView;

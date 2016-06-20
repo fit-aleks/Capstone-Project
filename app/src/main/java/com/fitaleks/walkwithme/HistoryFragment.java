@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fitaleks.walkwithme.adapters.HistoryTodayAdapter;
+import com.fitaleks.walkwithme.adapters.MyHistoryAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
@@ -22,7 +22,7 @@ import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
  * Created by alexanderkulikovskiy on 03.05.16.
  */
 public class HistoryFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private HistoryTodayAdapter adapter;
+    private MyHistoryAdapter adapter;
     private static final int ALL_HISTORY_LOADER = 1;
 
     private static final String[] HISTORY_BY_DAY_COLUMNS = {
@@ -41,7 +41,7 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         final View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new HistoryTodayAdapter(null);
+        adapter = new MyHistoryAdapter(null);
         recyclerView.setAdapter(adapter);
         return rootView;
     }
