@@ -22,8 +22,7 @@
         android:name=".WalkWithMeApplication">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,8 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.friends.FriendsDetailsActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:parentActivityName=".MainActivity"/>
 
         <receiver android:name=".BootCompletedReceiver" android:enabled="true" android:exported="false">
             <intent-filter>
