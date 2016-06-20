@@ -3,6 +3,8 @@ package com.fitaleks.walkwithme;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -30,9 +32,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
+import com.fitaleks.walkwithme.data.database.FitnessHistory;
+import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
@@ -45,6 +51,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -154,6 +162,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new AlertDialog.Builder(MainActivity.this)
                                 .setTitle("Need permission")
                                 .setMessage("To have an ability yo sync data")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            requestPermissions(new String[]{Manifest.permission.GET_ACCOUNTS}, RC_GET_ACCOUNTS);
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
                                 .show();
                     } else {
                         requestPermissions(new String[]{Manifest.permission.GET_ACCOUNTS}, RC_GET_ACCOUNTS);
@@ -358,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onAuthenticated(AuthData authData) {
-            mAuthProgressDialog.dismiss();
             Log.i(TAG, provider + " auth successful");
             if (authData == null) {
                 return;
@@ -367,6 +383,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPrefUtils.setUserUid(MainActivity.this, authData.getUid());
             SharedPrefUtils.setUserPhoto(MainActivity.this, authData.getProviderData().get("profileImageURL").toString());
             setAuthenticatedUser();
+            FirebaseHelper helper = new FirebaseHelper.Builder()
+                    .addChild(FirebaseHelper.KEY_STEPS)
+                    .addChild(authData.getUid())
+                    .build();
+            helper.getFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    getContentResolver().delete(WalkWithMeProvider.History.CONTENT_URI, null, null);
+                    List<ContentValues> history = new ArrayList<>();
+
+                    for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
+
+                        Log.d("Auth", "stepRecord.key" + stepRecord.getKey());
+                        Log.d("Auth", "stepRecord.value" + stepRecord.getValue());
+                        ContentValues oneHistoryRecord = new ContentValues();
+                        oneHistoryRecord.put(FitnessHistory.DATE, stepRecord.getKey());
+                        oneHistoryRecord.put(FitnessHistory.NUM_OF_STEPS, (String)stepRecord.getValue());
+                        history.add(oneHistoryRecord);
+                    }
+                    if (history.size() > 0) {
+                        ContentValues[] cVVector = new ContentValues[history.size()];
+                        history.toArray(cVVector);
+                        getContentResolver()
+                                .bulkInsert(WalkWithMeProvider.History.CONTENT_URI, cVVector);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            mAuthProgressDialog.dismiss();
         }
 
         @Override
