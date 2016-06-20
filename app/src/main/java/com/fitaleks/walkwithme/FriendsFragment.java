@@ -2,7 +2,6 @@ package com.fitaleks.walkwithme;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,8 @@ import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
 import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.utils.MarginDecoration;
+import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,13 +56,14 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
             @Override
             public void onClick(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
                 ((FriendsFragment.Callback)getActivity()).onItemSelected(
-                        WalkWithMeProvider.FriendsTable.withFriendGoogleId(googleId),
+                        googleId,
                         viewHolder
                 );
             }
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new MarginDecoration(getContext()));
 
         loadFriends();
         return rootView;
@@ -144,6 +146,6 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
         /**
          * Callback for when an item has been selected.
          */
-        void onItemSelected(Uri dateUri, MyFriendsAdapter.FriendViewHolder viewHolder);
+        void onItemSelected(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder);
     }
 }

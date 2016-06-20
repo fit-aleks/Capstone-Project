@@ -9,6 +9,7 @@
 
     <dimen name="list_item_horizontal_margin">16dp</dimen>
     <dimen name="list_item_vertical_margin">16dp</dimen>
+    <dimen name="list_item_vertical_space">8dp</dimen>
     <dimen name="list_item_content_horizontal_margin">8dp</dimen>
 
     <dimen name="photo_list_size">48dp</dimen>

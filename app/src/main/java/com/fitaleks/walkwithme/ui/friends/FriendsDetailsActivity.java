@@ -21,7 +21,7 @@ public class FriendsDetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             final Bundle bundle = new Bundle();
-            bundle.putParcelable(FriendsDetailsFragment.DETAIL_URI, getIntent().getData());
+            bundle.putString(FriendsDetailsFragment.DETAIL_URI, getIntent().getStringExtra(KEY_GOOGLE_ID));
             bundle.putBoolean(FriendsDetailsFragment.DETAIL_TRANSITION_ANIMATION, true);
 
             final FriendsDetailsFragment detailsFragment = new FriendsDetailsFragment();

@@ -18,5 +18,7 @@ public final class WalkWithMeDatabase {
     public static final String HISTORY = "history";
     @Table(Friends.class)
     public static final String FRIENDS = "friends";
+    @Table(FriendsHistory.class)
+    public static final String FRIENDS_HISTORY = "friends_history";
 
 }

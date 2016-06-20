@@ -7,6 +7,7 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 
 /**
  * Created by alexanderkulikovskiy on 03.05.16.

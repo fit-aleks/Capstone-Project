@@ -1,9 +1,11 @@
-package com.fitaleks.walkwithme;
+package com.fitaleks.walkwithme.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+
+import com.fitaleks.walkwithme.R;
 
 /**
  * Created by alexanderkulikovskiy on 30.03.16.

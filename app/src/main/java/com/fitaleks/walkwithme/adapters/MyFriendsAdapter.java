@@ -28,6 +28,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
         ImageView photo;
+
         public FriendViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -50,7 +51,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
 
     @Override
     public FriendViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final LayoutInflater inflater = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rootView = inflater.inflate(R.layout.list_item_friend, parent, false);
         return new FriendViewHolder(rootView);
     }

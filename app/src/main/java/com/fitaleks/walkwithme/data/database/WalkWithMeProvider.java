@@ -22,6 +22,7 @@ public final class WalkWithMeProvider {
     interface Path {
         String HISTORY = "history";
         String FRIENDS = "friends";
+        String FRIENDS_HISTORY = "friends_history";
     }
 
     private static Uri buildUri(String... paths) {
@@ -80,13 +81,34 @@ public final class WalkWithMeProvider {
         }
 
         @InexactContentUri(
-                name = "FRIEND_HISTORY",
+                name = "FRIEND_ITEM",
                 path = Path.FRIENDS + "/*",
                 type = "vnd.adnroid.cursor.dir/item",
                 whereColumn = Friends.GOOGLE_USER_ID,
                 pathSegment = 1)
         public static Uri withFriendGoogleId(final String friendsGoogleId) {
             return buildUri(Path.FRIENDS, friendsGoogleId);
+        }
+    }
+
+    @TableEndpoint(table = WalkWithMeDatabase.FRIENDS_HISTORY)
+    public static class FriendsHistoryTable {
+        @ContentUri(
+                path = Path.FRIENDS_HISTORY,
+                type = "vnd.android.cursor.dir/list",
+                defaultSort = FriendsHistory.GOOGLE_ID + " DESC"
+        )
+        public static final Uri CONTENT_URI = buildUri(Path.FRIENDS_HISTORY);
+
+        @InexactContentUri(
+                name = "FRIEND_HISTORY",
+                path = Path.FRIENDS_HISTORY + "/*",
+                type = "vnd.android.cursor.dir/list",
+                whereColumn = FriendsHistory.GOOGLE_ID,
+                pathSegment = 1
+        )
+        public static Uri withId(final String googleId) {
+            return buildUri(Path.FRIENDS_HISTORY, googleId);
         }
     }
 }

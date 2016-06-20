@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +41,8 @@ import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
+import com.fitaleks.walkwithme.utils.DeviceUtils;
+import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        if (!isServiceRunning()) {
+        if (DeviceUtils.isKitkatWithStepSensor(this) && !isServiceRunning()) {
             final Intent startStepService = new Intent(this, StepCounterService.class);
             startService(startStepService);
         }
@@ -394,9 +395,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     List<ContentValues> history = new ArrayList<>();
 
                     for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
-
-                        Log.d("Auth", "stepRecord.key" + stepRecord.getKey());
-                        Log.d("Auth", "stepRecord.value" + stepRecord.getValue());
                         ContentValues oneHistoryRecord = new ContentValues();
                         oneHistoryRecord.put(FitnessHistory.DATE, stepRecord.getKey());
                         oneHistoryRecord.put(FitnessHistory.NUM_OF_STEPS, (String)stepRecord.getValue());
@@ -427,10 +425,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onItemSelected(Uri dateUri, MyFriendsAdapter.FriendViewHolder viewHolder) {
+    public void onItemSelected(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
         //TODO: add two pane verison for tablets
-        Intent intent = new Intent(this, FriendsDetailsActivity.class)
-                .setData(dateUri);
+        Intent intent = new Intent(this, FriendsDetailsActivity.class);
+        intent.putExtra(FriendsDetailsActivity.KEY_GOOGLE_ID, googleId);
 //        ActivityOptionsCompat activityOptions =
 //                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
 //                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));

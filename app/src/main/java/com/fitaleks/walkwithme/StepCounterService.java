@@ -21,6 +21,8 @@ import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
+import com.fitaleks.walkwithme.utils.DeviceUtils;
+import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 
 import java.util.HashMap;
 
@@ -41,7 +43,7 @@ public class StepCounterService extends Service {
     @Override
     public void onCreate() {
 //        mPreviousCounterSteps = SharedPrefUtils.getNumOfStepsToday(this);
-        if (isKitkatWithStepSensor()) {
+        if (DeviceUtils.isKitkatWithStepSensor(this)) {
             // Start up the thread running the service
             final HandlerThread thread = new HandlerThread("ServiceStartArguments",
                     Process.THREAD_PRIORITY_BACKGROUND);
@@ -53,6 +55,9 @@ public class StepCounterService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (serviceHandler == null) {
+            return START_NOT_STICKY;
+        }
         String messageForServiceHandler = TODAYS_DATE + ";" + System.currentTimeMillis();
         // Send message to ServiceHandler
         Message msg = serviceHandler.obtainMessage();
@@ -68,29 +73,6 @@ public class StepCounterService extends Service {
 
         return null;
     }
-
-    /**
-     * Returns true if this device is supported. It needs to be running Android KitKat (4.4) or
-     * higher and has a step counter and step detector sensor.
-     * This check is useful when an app provides an alternative implementation or different
-     * functionality if the step sensors are not available or this code runs on a platform version
-     * below Android KitKat. If this functionality is required, then the minSDK parameter should
-     * be specified appropriately in the AndroidManifest.
-     *
-     * @return True iff the device can run this sample
-     */
-    private boolean isKitkatWithStepSensor() {
-        // BEGIN_INCLUDE(iskitkatsensor)
-        // Require at least Android KitKat
-        int currentApiVersion = android.os.Build.VERSION.SDK_INT;
-        // Check that the device supports the step counter and detector sensors
-        PackageManager packageManager = getPackageManager();
-        return currentApiVersion >= android.os.Build.VERSION_CODES.KITKAT
-                && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER)
-                && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR);
-        // END_INCLUDE(iskitkatsensor)
-    }
-
 
     private final class ServiceHandler extends Handler implements SensorEventListener2 {
         private final SensorManager mSensorManager;
