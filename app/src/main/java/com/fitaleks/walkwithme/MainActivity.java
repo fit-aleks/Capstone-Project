@@ -40,6 +40,7 @@ import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
+import com.fitaleks.walkwithme.ui.friends.FriendsDetailsFragment;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.fitaleks.walkwithme.utils.DeviceUtils;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     private TextView navNameTextView;
     private ImageView navImageView;
+
+    private boolean mTwoPane;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient googleApiClient;
@@ -93,6 +96,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (findViewById(R.id.detail_container) != null) {
+            mTwoPane = true;
+        } else {
+            mTwoPane = false;
+        }
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -426,12 +435,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onItemSelected(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
-        //TODO: add two pane verison for tablets
-        Intent intent = new Intent(this, FriendsDetailsActivity.class);
-        intent.putExtra(FriendsDetailsActivity.KEY_GOOGLE_ID, googleId);
+        if (mTwoPane) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FriendsDetailsFragment.DETAIL_GOOGLE_ID, googleId);
+            FriendsDetailsFragment detailsFragment = new FriendsDetailsFragment();
+            detailsFragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, detailsFragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, FriendsDetailsActivity.class);
+            intent.putExtra(FriendsDetailsActivity.KEY_GOOGLE_ID, googleId);
 //        ActivityOptionsCompat activityOptions =
 //                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
 //                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
-        ActivityCompat.startActivity(this, intent, null);
+            ActivityCompat.startActivity(this, intent, null);
+        }
+
     }
 }

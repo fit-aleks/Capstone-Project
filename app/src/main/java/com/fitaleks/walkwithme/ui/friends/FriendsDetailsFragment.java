@@ -3,7 +3,6 @@ package com.fitaleks.walkwithme.ui.friends;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.adapters.FriendHistoryAdapter;
-import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.FriendsHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
@@ -45,10 +43,11 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
     private static final int LOADER_FRIEND_DETAILS = 21;
     private static final int LOADER_FRIEND_HISTORY = 22;
 
-    static final String DETAIL_URI = "URI";
-    static final String DETAIL_TRANSITION_ANIMATION = "DTA";
+    public static final String DETAIL_GOOGLE_ID = "URI";
+    public static final String DETAIL_TRANSITION_ANIMATION = "DTA";
 
     private String googleId;
+    boolean transitionAnimation;
     private TextView name;
     private ImageView photo;
 
@@ -57,17 +56,24 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
+        final Bundle arguments = getArguments();
         if (arguments != null) {
-            googleId = arguments.getString(DETAIL_URI);
+            googleId = arguments.getString(DETAIL_GOOGLE_ID);
+            transitionAnimation = arguments.getBoolean(DETAIL_TRANSITION_ANIMATION, false);
         }
         final View rootView = inflater.inflate(R.layout.fragment_friend_details, container, false);
         final Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        final AppCompatActivity activity = (AppCompatActivity)getActivity();
-        activity.setSupportActionBar(toolbar);
-        if (toolbar != null) {
-            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (transitionAnimation) {
+            final AppCompatActivity activity = (AppCompatActivity)getActivity();
+            activity.setSupportActionBar(toolbar);
+            if (toolbar != null) {
+                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        } else {
+            if (toolbar != null) {
+                toolbar.setVisibility(View.GONE);
+            }
         }
 
         name = (TextView) rootView.findViewById(R.id.friend_name);
