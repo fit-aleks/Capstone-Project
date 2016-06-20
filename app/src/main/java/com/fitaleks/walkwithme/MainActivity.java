@@ -36,11 +36,14 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
+import com.fitaleks.walkwithme.adapters.MyHistoryAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsFragment;
+import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsActivity;
+import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsFragment;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.fitaleks.walkwithme.utils.DeviceUtils;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
@@ -59,7 +62,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        FriendsFragment.Callback {
+        FriendsFragment.Callback,
+        HistoryFragment.Callback {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private DrawerLayout drawer;
@@ -452,6 +456,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
             ActivityCompat.startActivity(this, intent, null);
         }
+    }
 
+    @Override
+    public void onItemSelected(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+        if (mTwoPane) {
+
+        } else {
+            Intent intent = new Intent(this, MyHistoryDetailsActivity.class);
+            intent.putExtra(MyHistoryDetailsActivity.KEY_DATE, date);
+//        ActivityOptionsCompat activityOptions =
+//                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+//                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
+            ActivityCompat.startActivity(this, intent, null);
+        }
     }
 }

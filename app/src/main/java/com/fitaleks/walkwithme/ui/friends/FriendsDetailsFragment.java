@@ -43,11 +43,11 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
     private static final int LOADER_FRIEND_DETAILS = 21;
     private static final int LOADER_FRIEND_HISTORY = 22;
 
-    public static final String DETAIL_GOOGLE_ID = "URI";
+    public static final String DETAIL_GOOGLE_ID = "GOOGLE_ID";
     public static final String DETAIL_TRANSITION_ANIMATION = "DTA";
 
     private String googleId;
-    boolean transitionAnimation;
+    private boolean transitionAnimation;
     private TextView name;
     private ImageView photo;
 
@@ -180,7 +180,7 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        adapter.swapCursor(null);
     }
 
 }

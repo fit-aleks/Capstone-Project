@@ -23,19 +23,29 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.Toda
     private final int VIEW_TYPE_HISTORY = 1;
 
     private Cursor cursor;
-    public MyHistoryAdapter(Cursor cursor) {
+    private MyHistoryAdapterOnClickHandler clickHandler;
+
+    public MyHistoryAdapter(Cursor cursor, MyHistoryAdapterOnClickHandler clickHandler) {
         this.cursor = cursor;
+        this.clickHandler = clickHandler;
     }
 
-    class TodayViewHolder extends RecyclerView.ViewHolder {
+    public class TodayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView stepsCountTextView;
         private TextView dateTextView;
+
         public TodayViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             stepsCountTextView = (TextView) itemView.findViewById(R.id.history_item_steps_count);
             dateTextView = (TextView) itemView.findViewById(R.id.history_item_date);
         }
 
+        @Override
+        public void onClick(View v) {
+            cursor.moveToPosition(getAdapterPosition());
+            clickHandler.onClick(cursor.getLong(HistoryFragment.COL_DATE), this);
+        }
     }
 
     @Override
@@ -71,5 +81,9 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.Toda
     @Override
     public int getItemCount() {
         return cursor != null ? cursor.getCount() : 0;
+    }
+
+    public interface MyHistoryAdapterOnClickHandler {
+        void onClick(long date, TodayViewHolder viewHolder);
     }
 }

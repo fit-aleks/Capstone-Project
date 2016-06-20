@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,22 +24,27 @@ import java.util.Calendar;
 
 /**
  * Fragment to display user's today's detailed physical activity
- *
+ * <p>
  * Created by alexanderkulikovskiy on 03.05.16.
  */
 public class TodayFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private int LOADER_TODAY_HISTORY = 0;
 
-    private MyHistoryAdapter adapter;
+//    private MyHistoryAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.content_main, container, false);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.today_history_list);
+        /*RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.today_history_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new MyHistoryAdapter(null);
-        recyclerView.setAdapter(adapter);
+        adapter = new MyHistoryAdapter(null, new MyHistoryAdapter.MyHistoryAdapterOnClickHandler() {
+            @Override
+            public void onClick(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+
+            }
+        });
+        recyclerView.setAdapter(adapter);*/
 
         return rootView;
     }
@@ -76,11 +83,11 @@ public class TodayFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
+//        adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
+//        adapter.swapCursor(null);
     }
 }

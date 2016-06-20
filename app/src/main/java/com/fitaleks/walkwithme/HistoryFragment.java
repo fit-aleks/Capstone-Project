@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
 import com.fitaleks.walkwithme.adapters.MyHistoryAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
@@ -41,7 +42,12 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         final View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new MyHistoryAdapter(null);
+        adapter = new MyHistoryAdapter(null, new MyHistoryAdapter.MyHistoryAdapterOnClickHandler() {
+            @Override
+            public void onClick(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+                ((HistoryFragment.Callback)getActivity()).onItemSelected(date, viewHolder);
+            }
+        });
         recyclerView.setAdapter(adapter);
         return rootView;
     }
@@ -76,5 +82,19 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     *
+     * Created by alex1101 on 28.08.14.
+     */
+    public interface Callback {
+        /**
+         * Callback for when an item has been selected.
+         */
+        void onItemSelected(long date, MyHistoryAdapter.TodayViewHolder viewHolder);
     }
 }
