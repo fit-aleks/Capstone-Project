@@ -34,6 +34,7 @@ import com.fitaleks.walkwithme.utils.MarginDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by alexanderkulikovskiy on 20.06.16.
@@ -119,7 +120,8 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
                 for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
                     ContentValues oneHistoryRecord = new ContentValues();
                     oneHistoryRecord.put(FriendsHistory.TIME, stepRecord.getKey());
-                    oneHistoryRecord.put(FriendsHistory.STEPS, (Long)stepRecord.getValue());
+                    final String stepCount = (String)stepRecord.getValue();
+                    oneHistoryRecord.put(FriendsHistory.STEPS, stepCount);
                     oneHistoryRecord.put(FriendsHistory.GOOGLE_ID, googleId);
                     history.add(oneHistoryRecord);
                 }
