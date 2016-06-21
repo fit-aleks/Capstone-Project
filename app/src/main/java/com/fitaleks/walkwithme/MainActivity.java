@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FriendsFragment.Callback,
         HistoryFragment.Callback {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String STATE_SELECTED_ENTITY_ID = "selected_entuty";
+    private long stateSelectedId = -1;
 
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
@@ -144,12 +146,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .into(navImageView);
             }
         }
+        if (savedInstanceState != null) {
+            stateSelectedId = savedInstanceState.getLong(STATE_SELECTED_ENTITY_ID, R.id.nav_history);
+            openNavigationFragment();
+        }
 
         if (DeviceUtils.isKitkatWithStepSensor(this) && !isServiceRunning()) {
             final Intent startStepService = new Intent(this, StepCounterService.class);
             startService(startStepService);
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(STATE_SELECTED_ENTITY_ID, stateSelectedId);
     }
 
     @Override
@@ -237,26 +249,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        final int id = item.getItemId();
+        stateSelectedId = item.getItemId();
+        openNavigationFragment();
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void openNavigationFragment() {
         Fragment newFragment = null;
-        if (id == R.id.nav_history) {
+        if (stateSelectedId == R.id.nav_history) {
             newFragment = new HistoryFragment(); // Show all history
-        } else if (id == R.id.nav_friends) {
+        } else if (stateSelectedId == R.id.nav_friends) {
             newFragment = new FriendsFragment(); // Show today's friends
-        } else if (id == R.id.nav_manage) {
+        } else if (stateSelectedId == R.id.nav_manage) {
             newFragment = new SettingsFragment();
         }
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, newFragment)
                 .commit();
-
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
 
