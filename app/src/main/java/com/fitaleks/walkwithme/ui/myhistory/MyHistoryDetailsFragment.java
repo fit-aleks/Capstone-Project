@@ -8,6 +8,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +18,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fitaleks.walkwithme.R;
+import com.fitaleks.walkwithme.adapters.MyByDayAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -36,13 +37,16 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
     private long date;
     private boolean transitionAnimation;
 
-    private TextView dateTextView;
+    private MyByDayAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_my_history_details, container, false);
-        dateTextView = (TextView) rootView.findViewById(R.id.date);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MyByDayAdapter(null);
+        recyclerView.setAdapter(adapter);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -58,8 +62,6 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         }
-
-        dateTextView.setText(String.format(Locale.getDefault(), "%d", date));
 
         return rootView;
     }
@@ -99,21 +101,11 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        final SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
-        final StringBuilder sb = new StringBuilder();
-        while (data.moveToNext()) {
-            sb.append("date = ");
-            sb.append(format.format(new Date(data.getLong(data.getColumnIndex(FitnessHistory.DATE)))));
-            sb.append("\n");
-            sb.append("steps = ");
-            sb.append(data.getLong(data.getColumnIndex(FitnessHistory.NUM_OF_STEPS)));
-            sb.append("\n==================\n");
-        }
-        dateTextView.setText(sb.toString());
+        adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        dateTextView.setText("no data");
+        adapter.swapCursor(null);
     }
 }
