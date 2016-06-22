@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.data.database.Friends;
+import com.fitaleks.walkwithme.ui.friends.FriendsFragment;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 
 /**
@@ -20,13 +21,17 @@ import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.FriendViewHolder> {
     public Cursor cursor;
     private FriendsAdapterOnClickHandler onClickHandler;
+    private final View emptyView;
 
-    public MyFriendsAdapter(FriendsAdapterOnClickHandler clickHandler) {
+
+    public MyFriendsAdapter(View emptyView,FriendsAdapterOnClickHandler clickHandler) {
+        this.emptyView = emptyView;
         this.onClickHandler = clickHandler;
     }
 
     public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
+        TextView stepsCount;
         ImageView photo;
 
         public FriendViewHolder(View itemView) {
@@ -34,12 +39,13 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
             itemView.setOnClickListener(this);
             name = (TextView) itemView.findViewById(R.id.list_item_name);
             photo = (ImageView) itemView.findViewById(R.id.list_item_photo);
+            stepsCount = (TextView) itemView.findViewById(R.id.list_item_steps_count);
         }
 
         @Override
         public void onClick(View v) {
             cursor.moveToPosition(getAdapterPosition());
-            final String googleId = cursor.getString(cursor.getColumnIndex(Friends.GOOGLE_USER_ID));
+            final String googleId = cursor.getString(FriendsFragment.COL_GOOGLE_USER_ID);
             onClickHandler.onClick(googleId, this);
         }
     }
@@ -47,6 +53,11 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
         notifyDataSetChanged();
+        if (cursor == null || cursor.getCount() == 0) {
+            this.emptyView.setVisibility(View.VISIBLE);
+        } else {
+            this.emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -59,9 +70,10 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.name.setText(cursor.getString(cursor.getColumnIndex(Friends.FRIEND_NAME)));
+        holder.name.setText(cursor.getString(FriendsFragment.COL_NAME));
+        holder.stepsCount.setText(holder.stepsCount.getContext().getString(R.string.step_counter_title, cursor.getLong(FriendsFragment.COL_SUM_STEPS)));
         Glide.with(holder.photo.getContext())
-                .load(cursor.getString(cursor.getColumnIndex(Friends.PHOTO)))
+                .load(cursor.getString(FriendsFragment.COL_PHOTO))
                 .bitmapTransform(new CropCircleTransformation(holder.photo.getContext()))
                 .placeholder(R.drawable.friend_photo_placeholder)
                 .into(holder.photo);

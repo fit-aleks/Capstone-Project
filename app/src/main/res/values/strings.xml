@@ -32,4 +32,6 @@
     <string name="pref_enable_sharing_location_false">Not enabled</string>
     <string name="pref_enable_sharing_location_true">Enabled</string>
     <string name="pref_enable_sharing_location_default" translatable="false">false</string>
+
+    <string name="no_friends">Login please to see other user\'s statistics</string>
 </resources>

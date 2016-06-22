@@ -42,8 +42,9 @@ import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsActivity;
 import com.fitaleks.walkwithme.ui.friends.FriendsDetailsFragment;
+import com.fitaleks.walkwithme.ui.friends.FriendsFragment;
+import com.fitaleks.walkwithme.ui.friends.FriendsPresenter;
 import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsActivity;
-import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsFragment;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.fitaleks.walkwithme.utils.DeviceUtils;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
@@ -264,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             newFragment = new HistoryFragment(); // Show all history
         } else if (stateSelectedId == R.id.nav_friends) {
             newFragment = new FriendsFragment(); // Show today's friends
+            new FriendsPresenter((FriendsFragment) newFragment);
         } else if (stateSelectedId == R.id.nav_manage) {
             newFragment = new SettingsFragment();
         }
@@ -276,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d("MainActivity", "onConnected");
         getGoogleOAuthTokenAndLogin();
     }
 
@@ -424,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
                         ContentValues oneHistoryRecord = new ContentValues();
                         oneHistoryRecord.put(FitnessHistory.DATE, stepRecord.getKey());
-                        oneHistoryRecord.put(FitnessHistory.NUM_OF_STEPS, (String)stepRecord.getValue());
+                        oneHistoryRecord.put(FitnessHistory.NUM_OF_STEPS, (String) stepRecord.getValue());
                         history.add(oneHistoryRecord);
                     }
                     if (history.size() > 0) {

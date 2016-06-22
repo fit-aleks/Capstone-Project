@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -17,8 +17,9 @@
             android:id="@+id/list_item_photo"
             android:layout_width="@dimen/photo_list_size"
             android:layout_height="@dimen/photo_list_size"
-            android:layout_marginBottom="@dimen/list_item_vertical_margin"
-            android:layout_marginTop="@dimen/list_item_vertical_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_centerVertical="true"
             tools:src="@drawable/friend_photo_placeholder" />
 
         <TextView
@@ -26,9 +27,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@id/list_item_photo"
+            android:layout_toEndOf="@id/list_item_photo"
             android:layout_marginLeft="@dimen/list_item_content_horizontal_margin"
             android:layout_marginStart="@dimen/list_item_content_horizontal_margin"
             android:textAppearance="?android:textAppearanceMedium"
             tools:text="Some name of another person. It can be very very very long" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/list_item_steps_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_alignLeft="@id/list_item_name"
+            android:layout_below="@id/list_item_name"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:text="344 000 steps" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

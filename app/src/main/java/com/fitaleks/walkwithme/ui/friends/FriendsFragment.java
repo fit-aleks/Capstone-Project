@@ -1,6 +1,5 @@
-package com.fitaleks.walkwithme;
+package com.fitaleks.walkwithme.ui.friends;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,28 +14,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
 import com.fitaleks.walkwithme.data.database.Friends;
+import com.fitaleks.walkwithme.data.database.FriendsHistory;
+import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
-import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.utils.MarginDecoration;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by alexanderkulikovskiy on 05.05.16.
  */
-public class FriendsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class FriendsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, FriendsContract.View {
     private static final int LOADER_FRIENDS = 0;
 
     private MyFriendsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FriendsContract.Presenter friendsPresenter;
+
+    private final String[] FRIENDS_SELECTION_COLUMNS = {
+            WalkWithMeDatabase.FRIENDS + "." + Friends.ID,
+            Friends.FRIEND_NAME,
+            Friends.PHOTO,
+            Friends.GOOGLE_USER_ID,
+            "SUM(" + WalkWithMeDatabase.FRIENDS_HISTORY + "." + FriendsHistory.STEPS + ")"
+    };
+
+    public static final int COL_FRIEND_ID = 0;
+    public static final int COL_NAME = 1;
+    public static final int COL_PHOTO = 2;
+    public static final int COL_GOOGLE_USER_ID = 3;
+    public static final int COL_SUM_STEPS = 4;
 
     @Nullable
     @Override
@@ -47,60 +56,42 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadFriends();
+                getContext().getContentResolver().delete(WalkWithMeProvider.FriendsTable.CONTENT_URI, null, null);
+                friendsPresenter.reloadFriendsList();
             }
         });
 
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.friends_list);
-        adapter = new MyFriendsAdapter(new MyFriendsAdapter.FriendsAdapterOnClickHandler() {
-            @Override
-            public void onClick(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
-                ((FriendsFragment.Callback)getActivity()).onItemSelected(
-                        googleId,
-                        viewHolder
-                );
-            }
-        });
+        adapter = new MyFriendsAdapter(rootView.findViewById(R.id.no_data_placeholder),
+                new MyFriendsAdapter.FriendsAdapterOnClickHandler() {
+                    @Override
+                    public void onClick(String googleId, MyFriendsAdapter.FriendViewHolder viewHolder) {
+                        ((FriendsFragment.Callback) getActivity()).onItemSelected(
+                                googleId,
+                                viewHolder
+                        );
+                    }
+                });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new MarginDecoration(getContext()));
 
-        loadFriends();
         return rootView;
     }
 
-    private void loadFriends() {
-        final FirebaseHelper helper = new FirebaseHelper.Builder()
-                .addChild(FirebaseHelper.KEY_USERS)
-                .build();
-        helper.getFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final List<ContentValues> users = new ArrayList<>();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    final HashMap<String, String> values = (HashMap<String, String>) child.getValue();
+    @Override
+    public void setLoadingIndicator(boolean active) {
+        swipeRefreshLayout.setRefreshing(active);
+    }
 
-                    final ContentValues contentValues = new ContentValues();
-                    contentValues.put(Friends.FRIEND_NAME, values.get(Friends.FRIEND_NAME));
-                    contentValues.put(Friends.PHOTO, values.get(Friends.PHOTO));
-                    contentValues.put(Friends.GOOGLE_USER_ID, values.get(Friends.GOOGLE_USER_ID));
-                    users.add(contentValues);
-                }
-                if (users.size() > 0) {
-                    ContentValues[] cVVector = new ContentValues[users.size()];
-                    users.toArray(cVVector);
-                    WalkWithMeApplication.getApplication()
-                            .getContentResolver()
-                            .bulkInsert(WalkWithMeProvider.FriendsTable.CONTENT_URI, cVVector);
-                }
-                swipeRefreshLayout.setRefreshing(false);
-            }
+    @Override
+    public void showNoData() {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+    }
 
-            }
-        });
+    @Override
+    public void setPresenter(FriendsContract.Presenter presenter) {
+        friendsPresenter = presenter;
     }
 
     @Override
@@ -113,16 +104,17 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(LOADER_FRIENDS, null, this);
+        friendsPresenter.start();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getContext(),
-                WalkWithMeProvider.FriendsTable.CONTENT_URI,
-                null,
+                WalkWithMeProvider.FriendsTable.friendsWithSteps,
+                FRIENDS_SELECTION_COLUMNS,
                 Friends.GOOGLE_USER_ID + " IS NULL OR " + Friends.GOOGLE_USER_ID + " NOT LIKE ?",
                 new String[]{SharedPrefUtils.getUserUid(getContext())},
-                null);
+                FRIENDS_SELECTION_COLUMNS[FRIENDS_SELECTION_COLUMNS.length - 1] + " DESC");
     }
 
     @Override
@@ -139,7 +131,7 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
      * selections.
-     *
+     * <p>
      * Created by alex1101 on 28.08.14.
      */
     public interface Callback {

@@ -15,7 +15,7 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
  */
 public interface Friends {
     @DataType(INTEGER) @PrimaryKey @AutoIncrement String ID = "_id";
-    @DataType(INTEGER) @NotNull @Unique(onConflict = ConflictResolutionType.REPLACE) String FRIEND_NAME = "friend_name";
+    @DataType(TEXT) @NotNull @Unique(onConflict = ConflictResolutionType.REPLACE) String FRIEND_NAME = "friend_name";
     @DataType(INTEGER) String NUM_OF_STEPS = "num_of_steps";
     @DataType(TEXT) String GOOGLE_USER_ID = "user_id";
     @DataType(TEXT) String PHOTO = "photo";

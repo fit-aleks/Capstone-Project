@@ -55,7 +55,7 @@ public final class WalkWithMeProvider {
         @ContentUri(
                 path = Path.HISTORY + "/by_days",
                 type = "vnd.android.cursor.dir/list",
-                groupBy = "strftime('%d-%m-%Y', " + FitnessHistory.DATE +"/1000, 'unixepoch', 'localtime')"
+                groupBy = "strftime('%d-%m-%Y', " + FitnessHistory.DATE + "/1000, 'unixepoch', 'localtime')"
         )
         public static final Uri BY_DAYS_URI = buildUri(Path.HISTORY, "by_days");
 
@@ -82,13 +82,21 @@ public final class WalkWithMeProvider {
 
         @InexactContentUri(
                 name = "FRIEND_ITEM",
-                path = Path.FRIENDS + "/*",
+                path = Path.FRIENDS + "/friend_item" + "/*",
                 type = "vnd.adnroid.cursor.dir/item",
                 whereColumn = Friends.GOOGLE_USER_ID,
-                pathSegment = 1)
+                pathSegment = 2)
         public static Uri withFriendGoogleId(final String friendsGoogleId) {
-            return buildUri(Path.FRIENDS, friendsGoogleId);
+            return buildUri(Path.FRIENDS, "friend_item", friendsGoogleId);
         }
+
+        @ContentUri(
+                path = Path.FRIENDS + "/with_steps",
+                type = "vnd.android.cursor.dir/list",
+                join = "JOIN " + WalkWithMeDatabase.FRIENDS_HISTORY + " ON " + Friends.GOOGLE_USER_ID + " LIKE " + FriendsHistory.GOOGLE_ID,
+                groupBy = Friends.GOOGLE_USER_ID
+        )
+        public static Uri friendsWithSteps = buildUri(Path.FRIENDS, "with_steps");
     }
 
     @TableEndpoint(table = WalkWithMeDatabase.FRIENDS_HISTORY)
