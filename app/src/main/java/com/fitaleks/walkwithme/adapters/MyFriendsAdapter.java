@@ -11,9 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.fitaleks.walkwithme.R;
-import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.ui.friends.FriendsFragment;
-import com.fitaleks.walkwithme.utils.CropCircleTransformation;
+import com.fitaleks.walkwithme.utils.ui.CropCircleTransformation;
 
 /**
  * Created by alexanderkulikovskiy on 05.05.16.
@@ -30,9 +29,9 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
     }
 
     public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name;
-        TextView stepsCount;
-        ImageView photo;
+        public TextView name;
+        public TextView stepsCount;
+        public ImageView photo;
 
         public FriendViewHolder(View itemView) {
             super(itemView);

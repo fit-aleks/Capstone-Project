@@ -15,7 +15,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -46,7 +48,7 @@ import com.fitaleks.walkwithme.ui.friends.FriendsFragment;
 import com.fitaleks.walkwithme.ui.friends.FriendsPresenter;
 import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsActivity;
 import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsFragment;
-import com.fitaleks.walkwithme.utils.CropCircleTransformation;
+import com.fitaleks.walkwithme.utils.ui.CropCircleTransformation;
 import com.fitaleks.walkwithme.utils.DeviceUtils;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -479,15 +481,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Intent intent = new Intent(this, FriendsDetailsActivity.class);
             intent.putExtra(FriendsDetailsActivity.KEY_GOOGLE_ID, googleId);
-//        ActivityOptionsCompat activityOptions =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-//                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
-            ActivityCompat.startActivity(this, intent, null);
+            ActivityOptionsCompat activityOptions =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                            new Pair<View, String>(viewHolder.photo, getString(R.string.friend_photo_transition_name)));
+            ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         }
     }
 
     @Override
-    public void onItemSelected(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+    public void onItemSelected(long date, MyHistoryAdapter.MyHistoryDayViewHolder viewHolder) {
         if (mTwoPane) {
             Bundle bundle = new Bundle();
             bundle.putLong(MyHistoryDetailsFragment.DETAIL_DATE, date);

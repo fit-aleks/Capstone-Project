@@ -21,6 +21,7 @@ public class MyByDayAdapter extends RecyclerView.Adapter<MyByDayAdapter.MyByDayV
     class MyByDayViewHolder extends RecyclerView.ViewHolder {
         TextView stepCount;
         TextView time;
+
         public MyByDayViewHolder(View itemView) {
             super(itemView);
             stepCount = (TextView) itemView.findViewById(R.id.history_item_steps_count);
@@ -41,7 +42,7 @@ public class MyByDayAdapter extends RecyclerView.Adapter<MyByDayAdapter.MyByDayV
 
     @Override
     public MyByDayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
+        final View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history, parent, false);
         return new MyByDayViewHolder(rootView);
     }
 
@@ -49,7 +50,7 @@ public class MyByDayAdapter extends RecyclerView.Adapter<MyByDayAdapter.MyByDayV
     public void onBindViewHolder(MyByDayViewHolder holder, int position) {
         cursor.moveToPosition(position);
         holder.stepCount.setText(holder.stepCount.getContext().getString(R.string.step_counter_title, cursor.getInt(HistoryFragment.COL_NUMBER_OF_STEPS)));
-        final SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+        final SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
         final Date dateOfActivity = new Date(cursor.getLong(HistoryFragment.COL_DATE));
         holder.time.setText(format.format(dateOfActivity));
     }

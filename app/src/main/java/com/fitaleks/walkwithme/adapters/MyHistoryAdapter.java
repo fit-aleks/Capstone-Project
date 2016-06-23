@@ -9,15 +9,12 @@ import android.widget.TextView;
 
 import com.fitaleks.walkwithme.HistoryFragment;
 import com.fitaleks.walkwithme.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.fitaleks.walkwithme.utils.DateUtils;
 
 /**
  * Created by alexanderkulikovskiy on 23.04.16.
  */
-public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.TodayViewHolder> {
+public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.MyHistoryDayViewHolder> {
 
     private final int VIEW_TYPE_TODAY = 0;
     private final int VIEW_TYPE_HISTORY = 1;
@@ -30,11 +27,11 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.Toda
         this.clickHandler = clickHandler;
     }
 
-    public class TodayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView stepsCountTextView;
-        private TextView dateTextView;
+    public class MyHistoryDayViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView stepsCountTextView;
+        public TextView dateTextView;
 
-        public TodayViewHolder(View itemView) {
+        public MyHistoryDayViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             stepsCountTextView = (TextView) itemView.findViewById(R.id.history_item_steps_count);
@@ -49,23 +46,28 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.Toda
     }
 
     @Override
-    public TodayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyHistoryDayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (!(parent instanceof RecyclerView )) {
             throw new RuntimeException("Not bound to RecyclerViewSelection");
         }
-        final int layoutId = (viewType == VIEW_TYPE_TODAY) ? R.layout.list_item_today_summary : R.layout.history_item;
+        final int layoutId = (viewType == VIEW_TYPE_TODAY) ? R.layout.list_item_today_summary : R.layout.list_item_history;
         final View rootView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         rootView.setFocusable(true);
-        return new TodayViewHolder(rootView);
+        return new MyHistoryDayViewHolder(rootView);
     }
 
     @Override
-    public void onBindViewHolder(TodayViewHolder holder, int position) {
+    public void onBindViewHolder(MyHistoryDayViewHolder holder, int position) {
         cursor.moveToPosition(position);
+
         holder.stepsCountTextView.setText(holder.stepsCountTextView.getContext().getString(R.string.step_counter_title, cursor.getInt(HistoryFragment.COL_NUMBER_OF_STEPS)));
-        final SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        final Date dateOfActivity = new Date(cursor.getLong(HistoryFragment.COL_DATE));
-        holder.dateTextView.setText(format.format(dateOfActivity));
+        if (position != 0) {
+            holder.dateTextView.setText(DateUtils.getDayName(holder.dateTextView.getContext(), cursor.getLong(HistoryFragment.COL_DATE)));
+        } else {
+            holder.stepsCountTextView.setText(String.format("%s, %s",
+                    holder.stepsCountTextView.getContext().getString(R.string.date_today),
+                    holder.stepsCountTextView.getContext().getString(R.string.step_counter_title, cursor.getInt(HistoryFragment.COL_NUMBER_OF_STEPS))));
+        }
     }
 
     @Override
@@ -84,6 +86,6 @@ public class MyHistoryAdapter extends RecyclerView.Adapter<MyHistoryAdapter.Toda
     }
 
     public interface MyHistoryAdapterOnClickHandler {
-        void onClick(long date, TodayViewHolder viewHolder);
+        void onClick(long date, MyHistoryDayViewHolder viewHolder);
     }
 }

@@ -15,16 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.adapters.MyByDayAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
-import com.fitaleks.walkwithme.utils.DividerItemDecoration;
+import com.fitaleks.walkwithme.utils.DateUtils;
+import com.fitaleks.walkwithme.utils.ui.DividerItemDecoration;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by alexander on 20.06.16.
@@ -60,8 +59,9 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
             if (toolbar != null) {
                 final AppCompatActivity activity = (AppCompatActivity) getActivity();
                 activity.setSupportActionBar(toolbar);
-                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+//                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                activity.getSupportActionBar().setTitle(DateUtils.getDayName(getContext(), date));
             }
         }
 

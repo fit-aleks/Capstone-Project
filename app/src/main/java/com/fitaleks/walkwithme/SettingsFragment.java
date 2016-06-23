@@ -21,8 +21,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         addPreferencesFromResource(R.xml.pref_general);
 
         bindPreference(findPreference(getString(R.string.pref_enable_sharing_key)));
-        bindPreference(findPreference(getString(R.string.pref_enable_sharing_location_key)));
-        bindPreference(findPreference(getString(R.string.pref_enable_tracking_location_key)));
+//        bindPreference(findPreference(getString(R.string.pref_enable_sharing_location_key)));
+//        bindPreference(findPreference(getString(R.string.pref_enable_tracking_location_key)));
     }
 
     private void bindPreference(Preference preference) {

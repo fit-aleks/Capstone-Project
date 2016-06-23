@@ -1,4 +1,4 @@
-package com.fitaleks.walkwithme.utils;
+package com.fitaleks.walkwithme.utils.ui;
 
 import android.content.Context;
 import android.graphics.Bitmap;

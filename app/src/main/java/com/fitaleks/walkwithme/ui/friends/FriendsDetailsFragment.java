@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.client.DataSnapshot;
@@ -29,12 +28,11 @@ import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.FriendsHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
-import com.fitaleks.walkwithme.utils.CropCircleTransformation;
-import com.fitaleks.walkwithme.utils.MarginDecoration;
+import com.fitaleks.walkwithme.utils.ui.CropCircleTransformation;
+import com.fitaleks.walkwithme.utils.ui.MarginDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by alexanderkulikovskiy on 20.06.16.
@@ -49,8 +47,8 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
 
     private String googleId;
     private boolean transitionAnimation;
-    private TextView name;
     private ImageView photo;
+    private Toolbar toolbar;
 
     private FriendHistoryAdapter adapter;
 
@@ -63,21 +61,9 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
             transitionAnimation = arguments.getBoolean(DETAIL_TRANSITION_ANIMATION, false);
         }
         final View rootView = inflater.inflate(R.layout.fragment_friend_details, container, false);
-        final Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
-        if (transitionAnimation) {
-            final AppCompatActivity activity = (AppCompatActivity)getActivity();
-            activity.setSupportActionBar(toolbar);
-            if (toolbar != null) {
-                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        } else {
-            if (toolbar != null) {
-                toolbar.setVisibility(View.GONE);
-            }
-        }
+        toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
 
-        name = (TextView) rootView.findViewById(R.id.friend_name);
+
         photo = (ImageView) rootView.findViewById(R.id.friend_avatar);
         final RecyclerView friendHistory = (RecyclerView) rootView.findViewById(R.id.list);
         friendHistory.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -120,7 +106,7 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
                 for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
                     ContentValues oneHistoryRecord = new ContentValues();
                     oneHistoryRecord.put(FriendsHistory.TIME, stepRecord.getKey());
-                    final String stepCount = (String)stepRecord.getValue();
+                    final String stepCount = (String) stepRecord.getValue();
                     oneHistoryRecord.put(FriendsHistory.STEPS, stepCount);
                     oneHistoryRecord.put(FriendsHistory.GOOGLE_ID, googleId);
                     history.add(oneHistoryRecord);
@@ -169,12 +155,24 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
             if (!data.moveToFirst()) {
                 return;
             }
-            this.name.setText(data.getString(data.getColumnIndex(Friends.FRIEND_NAME)));
             Glide.with(getContext())
                     .load(data.getString(data.getColumnIndex(Friends.PHOTO)))
                     .bitmapTransform(new CropCircleTransformation(getContext()))
                     .placeholder(R.drawable.friend_photo_placeholder)
                     .into(this.photo);
+            if (transitionAnimation) {
+                final AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.supportStartPostponedEnterTransition();
+                activity.setSupportActionBar(toolbar);
+                if (toolbar != null) {
+                    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    activity.getSupportActionBar().setTitle(data.getString(data.getColumnIndex(Friends.FRIEND_NAME)));
+                }
+            } else {
+                if (toolbar != null) {
+                    toolbar.setVisibility(View.GONE);
+                }
+            }
         } else {
             adapter.swapCursor(data);
         }

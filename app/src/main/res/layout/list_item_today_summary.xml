@@ -8,24 +8,18 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:src="@drawable/shoe_mine" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/walk_image" />
 
     <TextView
         android:id="@+id/history_item_steps_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/step_counter_title"
         android:textAppearance="?android:textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/history_item_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textAppearance="?android:textAppearanceMedium"
-        tools:text="Today"/>
 </LinearLayout>

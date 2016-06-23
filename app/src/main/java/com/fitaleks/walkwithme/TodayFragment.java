@@ -40,7 +40,7 @@ public class TodayFragment extends Fragment implements LoaderManager.LoaderCallb
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyHistoryAdapter(null, new MyHistoryAdapter.MyHistoryAdapterOnClickHandler() {
             @Override
-            public void onClick(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+            public void onClick(long date, MyHistoryAdapter.MyHistoryDayViewHolder viewHolder) {
 
             }
         });

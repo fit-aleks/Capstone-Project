@@ -20,7 +20,7 @@ import com.fitaleks.walkwithme.data.database.Friends;
 import com.fitaleks.walkwithme.data.database.FriendsHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
-import com.fitaleks.walkwithme.utils.MarginDecoration;
+import com.fitaleks.walkwithme.utils.ui.MarginDecoration;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 
 /**

@@ -8,18 +8,4 @@
         android:summaryOn="@string/pref_enable_sharing_true"
         android:defaultValue="@string/pref_enable_sharing_default" />
 
-    <CheckBoxPreference
-        android:title="@string/pref_enable_tracking_location_label"
-        android:key="@string/pref_enable_tracking_location_key"
-        android:summaryOff="@string/pref_enable_tracking_location_false"
-        android:summaryOn="@string/pref_enable_tracking_location_true"
-        android:defaultValue="@string/pref_enable_tracking_location_default" />
-
-    <CheckBoxPreference
-        android:title="@string/pref_enable_sharing_location_label"
-        android:key="@string/pref_enable_sharing_location_key"
-        android:summaryOff="@string/pref_enable_sharing_location_false"
-        android:summaryOn="@string/pref_enable_sharing_location_true"
-        android:defaultValue="@string/pref_enable_sharing_location_default" />
-
 </PreferenceScreen>

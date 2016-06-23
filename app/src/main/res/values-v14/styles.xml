@@ -7,5 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="toolbarStyle">@style/Toolbar</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 </resources>

@@ -9,7 +9,7 @@
     <string name="nav_item_friends">Friends</string>
     <string name="nav_item_settings">Preferences</string>
 
-    <string name="step_counter_title">Step count %1$d</string>
+    <string name="step_counter_title">%1$d steps</string>
 
     <string name="pref_name_key" translatable="false">pref_name</string>
     <string name="pref_uid_key" translatable="false">pref_uid</string>
@@ -34,4 +34,11 @@
     <string name="pref_enable_sharing_location_default" translatable="false">false</string>
 
     <string name="no_friends">Login please to see other user\'s statistics</string>
+
+    <string name="friend_photo_transition_name" translatable="false">TN_friend_photo</string>
+
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="pref_name_title">Your name</string>
+    <string name="pref_name_summary"></string>
 </resources>

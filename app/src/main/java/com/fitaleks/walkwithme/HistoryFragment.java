@@ -13,11 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fitaleks.walkwithme.adapters.MyFriendsAdapter;
 import com.fitaleks.walkwithme.adapters.MyHistoryAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeDatabase;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
+import com.fitaleks.walkwithme.utils.ui.DividerItemDecoration;
 
 /**
  * Created by alexanderkulikovskiy on 03.05.16.
@@ -42,9 +42,10 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         final View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.history_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         adapter = new MyHistoryAdapter(null, new MyHistoryAdapter.MyHistoryAdapterOnClickHandler() {
             @Override
-            public void onClick(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
+            public void onClick(long date, MyHistoryAdapter.MyHistoryDayViewHolder viewHolder) {
                 ((HistoryFragment.Callback)getActivity()).onItemSelected(date, viewHolder);
             }
         });
@@ -95,6 +96,6 @@ public class HistoryFragment extends Fragment implements LoaderManager.LoaderCal
         /**
          * Callback for when an item has been selected.
          */
-        void onItemSelected(long date, MyHistoryAdapter.TodayViewHolder viewHolder);
+        void onItemSelected(long date, MyHistoryAdapter.MyHistoryDayViewHolder viewHolder);
     }
 }
