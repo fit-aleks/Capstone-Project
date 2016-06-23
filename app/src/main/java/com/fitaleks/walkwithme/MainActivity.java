@@ -303,6 +303,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_GOOGLE_LOGIN) {
+            if (resultCode != RESULT_OK) {
+                mGoogleLoginClicked = false;
+            }
+            mGoogleIntentInProgress = false;
+            if (!googleApiClient.isConnecting()) {
+                googleApiClient.connect();
+            }
+        }
+    }
+
     /**
      * Show errors to users
      */
