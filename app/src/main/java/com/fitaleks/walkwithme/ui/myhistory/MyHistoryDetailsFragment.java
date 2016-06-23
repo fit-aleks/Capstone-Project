@@ -21,6 +21,7 @@ import com.fitaleks.walkwithme.R;
 import com.fitaleks.walkwithme.adapters.MyByDayAdapter;
 import com.fitaleks.walkwithme.data.database.FitnessHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
+import com.fitaleks.walkwithme.utils.DividerItemDecoration;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -45,6 +46,7 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
         final View rootView = inflater.inflate(R.layout.fragment_my_history_details, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         adapter = new MyByDayAdapter(null);
         recyclerView.setAdapter(adapter);
 

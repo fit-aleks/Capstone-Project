@@ -36,6 +36,7 @@ public class MyByDayAdapter extends RecyclerView.Adapter<MyByDayAdapter.MyByDayV
 
     public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
+        notifyDataSetChanged();
     }
 
     @Override

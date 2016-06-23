@@ -45,6 +45,7 @@ import com.fitaleks.walkwithme.ui.friends.FriendsDetailsFragment;
 import com.fitaleks.walkwithme.ui.friends.FriendsFragment;
 import com.fitaleks.walkwithme.ui.friends.FriendsPresenter;
 import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsActivity;
+import com.fitaleks.walkwithme.ui.myhistory.MyHistoryDetailsFragment;
 import com.fitaleks.walkwithme.utils.CropCircleTransformation;
 import com.fitaleks.walkwithme.utils.DeviceUtils;
 import com.fitaleks.walkwithme.utils.SharedPrefUtils;
@@ -104,11 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (findViewById(R.id.detail_container) != null) {
-            mTwoPane = true;
-        } else {
-            mTwoPane = false;
-        }
+        mTwoPane = findViewById(R.id.detail_container) != null;
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -492,7 +489,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onItemSelected(long date, MyHistoryAdapter.TodayViewHolder viewHolder) {
         if (mTwoPane) {
+            Bundle bundle = new Bundle();
+            bundle.putLong(MyHistoryDetailsFragment.DETAIL_DATE, date);
+            MyHistoryDetailsFragment detailsFragment = new MyHistoryDetailsFragment();
+            detailsFragment.setArguments(bundle);
 
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, detailsFragment)
+                    .commit();
         } else {
             Intent intent = new Intent(this, MyHistoryDetailsActivity.class);
             intent.putExtra(MyHistoryDetailsActivity.KEY_DATE, date);
