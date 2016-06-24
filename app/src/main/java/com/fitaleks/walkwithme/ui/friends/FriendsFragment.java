@@ -74,7 +74,7 @@ public class FriendsFragment extends Fragment implements LoaderManager.LoaderCal
                 });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new MarginDecoration(getContext()));
+        recyclerView.addItemDecoration(new MarginDecoration(getContext(), false));
 
         return rootView;
     }
