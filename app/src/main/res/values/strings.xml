@@ -45,4 +45,10 @@
     <string name="title_widget_today">Walks Today</string>
     <!-- A11y -->
     <string name="my_history_by_day_main_image_a11y">Motivation image to start walking</string>
+
+    <!-- Permission request -->
+    <string name="auth_permission_needed_error">Auth is not available without permission</string>
+    <string name="dialog_permission_auth_title">Need permission</string>
+    <string name="dialog_permission_auth_message">To have an ability to sync data</string>
+    <string name="dialog_permission_auth_positive">OK</string>
 </resources>

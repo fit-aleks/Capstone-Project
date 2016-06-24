@@ -24,4 +24,8 @@
     <string name="my_history_by_day_main_image_a11y">Начните двигаться</string>
     <string name="navigation_drawer_open">Открыть меню навигации</string>
     <string name="navigation_drawer_close">Закрыть меню навигации</string>
+    <string name="auth_permission_needed_error">Для авторизации необходимо запрашиваемое разрешение</string>
+    <string name="dialog_permission_auth_positive">ОК</string>
+    <string name="dialog_permission_auth_title">Требуется разрешение</string>
+    <string name="dialog_permission_auth_message">Чтобы иметь возможность авторизоваться и инхронихировать данные</string>
 </resources>

@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 loginToGoogle();
             } else {
-                Toast.makeText(this, "Auth is not available without permission", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.auth_permission_needed_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -186,9 +186,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.GET_ACCOUNTS)) {
                         new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Need permission")
-                                .setMessage("To have an ability yo sync data")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                .setTitle(R.string.dialog_permission_auth_title)
+                                .setMessage(R.string.dialog_permission_auth_message)
+                                .setPositiveButton(R.string.dialog_permission_auth_positive, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
