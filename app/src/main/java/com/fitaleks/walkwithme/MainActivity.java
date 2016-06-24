@@ -427,36 +427,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPrefUtils.setUserUid(MainActivity.this, authData.getUid());
             SharedPrefUtils.setUserPhoto(MainActivity.this, authData.getProviderData().get("profileImageURL").toString());
             setAuthenticatedUser();
-            FirebaseHelper helper = new FirebaseHelper.Builder()
-                    .addChild(FirebaseHelper.KEY_STEPS)
-                    .addChild(authData.getUid())
-                    .build();
-            helper.getFirebase().addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    getContentResolver().delete(WalkWithMeProvider.History.CONTENT_URI, null, null);
-                    List<ContentValues> history = new ArrayList<>();
-
-                    for (DataSnapshot stepRecord : dataSnapshot.getChildren()) {
-                        ContentValues oneHistoryRecord = new ContentValues();
-                        oneHistoryRecord.put(FitnessHistory.DATE, stepRecord.getKey());
-                        oneHistoryRecord.put(FitnessHistory.NUM_OF_STEPS, (String) stepRecord.getValue());
-                        history.add(oneHistoryRecord);
-                    }
-                    if (history.size() > 0) {
-                        ContentValues[] cVVector = new ContentValues[history.size()];
-                        history.toArray(cVVector);
-                        getContentResolver()
-                                .bulkInsert(WalkWithMeProvider.History.CONTENT_URI, cVVector);
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+            startService(new Intent(MainActivity.this, SyncDataService.class));
             mAuthProgressDialog.dismiss();
         }
 

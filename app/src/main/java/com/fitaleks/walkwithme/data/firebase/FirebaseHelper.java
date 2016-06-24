@@ -14,7 +14,6 @@ import java.util.List;
 public class FirebaseHelper {
     public static final String KEY_USERS = "users";
     public static final String KEY_STEPS = "steps";
-    public static final String KEY_LOCATION = "location";
 
 
     private Firebase firebase;

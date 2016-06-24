@@ -40,6 +40,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".StepCounterService"/>
+        <service android:name=".SyncDataService"/>
 
         <provider
             android:authorities="com.fitaleks.walkwithme.data.database.WalkWithMeProvider"
