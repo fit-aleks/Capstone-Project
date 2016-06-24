@@ -473,9 +473,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Intent intent = new Intent(this, MyHistoryDetailsActivity.class);
             intent.putExtra(MyHistoryDetailsActivity.KEY_DATE, date);
-//        ActivityOptionsCompat activityOptions =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-//                        new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
             ActivityCompat.startActivity(this, intent, null);
         }
     }

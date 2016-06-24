@@ -13,6 +13,7 @@
     <dimen name="list_item_content_horizontal_margin">8dp</dimen>
 
     <dimen name="photo_list_size">48dp</dimen>
+    <dimen name="big_photo_size">144dp</dimen>
 
     <!-- Today summary widget -->
     <dimen name="widget_today_summary_default_width">40dp</dimen>

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/friend_avatar"
-        android:layout_width="144dp"
-        android:layout_height="144dp"
+        android:layout_width="@dimen/big_photo_size"
+        android:layout_height="@dimen/big_photo_size"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:transitionName="@string/friend_photo_transition_name"/>

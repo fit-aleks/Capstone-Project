@@ -59,7 +59,6 @@ public class MyHistoryDetailsFragment extends Fragment implements LoaderManager.
             if (toolbar != null) {
                 final AppCompatActivity activity = (AppCompatActivity) getActivity();
                 activity.setSupportActionBar(toolbar);
-//                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 activity.getSupportActionBar().setTitle(DateUtils.getDayName(getContext(), date));
             }

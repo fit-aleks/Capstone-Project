@@ -51,8 +51,9 @@ public class FriendHistoryAdapter extends RecyclerView.Adapter<FriendHistoryAdap
     @Override
     public void onBindViewHolder(FriendHistoryViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.stepsCount.setText(String.format(Locale.getDefault(), "%d", cursor.getLong(cursor.getColumnIndex(FriendsHistory.STEPS))));
-        final SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+        holder.stepsCount.setText(holder.stepsCount.getContext().getString(R.string.step_counter_title,
+                cursor.getLong(cursor.getColumnIndex(FriendsHistory.STEPS))));
+        final SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM, HH:mm", Locale.getDefault());
         final Date dateOfActivity = new Date(cursor.getLong(cursor.getColumnIndex(FriendsHistory.TIME)));
         holder.date.setText(format.format(dateOfActivity));
     }

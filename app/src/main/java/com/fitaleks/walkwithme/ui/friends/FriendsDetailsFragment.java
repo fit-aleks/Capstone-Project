@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import com.fitaleks.walkwithme.data.database.FriendsHistory;
 import com.fitaleks.walkwithme.data.database.WalkWithMeProvider;
 import com.fitaleks.walkwithme.data.firebase.FirebaseHelper;
 import com.fitaleks.walkwithme.utils.ui.CropCircleTransformation;
+import com.fitaleks.walkwithme.utils.ui.DividerItemDecoration;
 import com.fitaleks.walkwithme.utils.ui.MarginDecoration;
 
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
         adapter = new FriendHistoryAdapter(null);
         friendHistory.setAdapter(adapter);
         friendHistory.addItemDecoration(new MarginDecoration(getContext()));
+        friendHistory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
         return rootView;
     }
 
@@ -124,6 +127,15 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

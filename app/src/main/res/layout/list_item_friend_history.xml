@@ -4,14 +4,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/history_item_steps_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="344000 steps"/>
+
     <TextView
         android:id="@+id/history_item_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
         tools:text="14:34"/>
+
+    <TextView
+        android:id="@+id/history_item_steps_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold"
+        tools:text="344000 steps"/>
+
 </LinearLayout>
