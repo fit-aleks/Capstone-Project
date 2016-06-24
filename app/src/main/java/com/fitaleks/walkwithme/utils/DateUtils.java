@@ -6,6 +6,9 @@ import android.text.format.Time;
 import com.fitaleks.walkwithme.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -35,6 +38,24 @@ public class DateUtils {
             final SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM", Locale.getDefault());
             return format.format(dateInMillis);
         }
+    }
+
+    /**
+     * Given time in millis, returns true if this time is today
+     *
+     * @param timeInMillis The date in milliseconds
+     * @return
+     */
+    public static boolean isToday(long timeInMillis) {
+        Calendar calendarOfSteps = new GregorianCalendar();
+        calendarOfSteps.setTimeInMillis(timeInMillis);
+        int dayOfActivity = calendarOfSteps.get(Calendar.DAY_OF_YEAR);
+
+        Calendar calendarNow = new GregorianCalendar();
+        calendarNow.setTimeInMillis(System.currentTimeMillis());
+        int currentDay = calendarNow.get(Calendar.DAY_OF_YEAR);
+
+        return dayOfActivity == currentDay;
     }
 
 }

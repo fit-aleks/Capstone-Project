@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:id="@+id/widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <ImageView
+            android:id="@+id/widget_icon"
+            android:layout_width="@dimen/widget_today_summary_min_resize_width"
+            android:layout_height="@dimen/widget_today_summary_min_resize_width"
+            android:scaleType="centerInside"
+            android:src="@drawable/shoe_mine"/>
+
+        <TextView
+            android:id="@+id/widget_steps_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:gravity="center_horizontal"
+            android:textColor="@color/primary_text"
+            tools:text="15000 steps"/>
+
+    </LinearLayout>
+
+</FrameLayout>

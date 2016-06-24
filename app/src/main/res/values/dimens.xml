@@ -13,4 +13,12 @@
     <dimen name="list_item_content_horizontal_margin">8dp</dimen>
 
     <dimen name="photo_list_size">48dp</dimen>
+
+    <!-- Today summary widget -->
+    <dimen name="widget_today_summary_default_width">40dp</dimen>
+    <dimen name="widget_today_summary_height">40dp</dimen>
+    <dimen name="widget_today_summary_min_resize_width">40dp</dimen>
+    <dimen name="widget_today_summary_min_resize_height">40dp</dimen>
+    <dimen name="widget_today_summary_large_width">220dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

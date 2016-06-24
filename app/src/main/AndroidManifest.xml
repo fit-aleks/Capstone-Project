@@ -45,6 +45,18 @@
             android:authorities="com.fitaleks.walkwithme.data.database.WalkWithMeProvider"
             android:name="com.fitaleks.walkwithme.data.provider.WalkWithMeProvider"
             android:exported="false"/>
+
+        <!-- Today summary widget -->
+        <receiver android:name=".widget.TodaySummaryWidgetProvider"
+            android:label="@string/title_widget_today">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.fitaleks.walkwithme.ACTION_DATA_UPDATED"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_summary_today"/>
+        </receiver>
+        <service android:name=".widget.TodaySummaryWidgetIntentService"/>
     </application>
 
 </manifest>

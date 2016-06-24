@@ -2,8 +2,8 @@ package com.fitaleks.walkwithme;
 
 import android.app.Service;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -27,8 +27,11 @@ import com.fitaleks.walkwithme.utils.SharedPrefUtils;
 import java.util.HashMap;
 
 public class StepCounterService extends Service {
+    public static final String ACTION_DATA_UPDATED =
+            "com.fitaleks.walkwithme.ACTION_DATA_UPDATED";
+
     private static final String LOG_TAG = StepCounterService.class.getSimpleName();
-    private static final int ONE_MINUTE_IN_MS = 60 * 1000;
+    private static final int TEN_MINUTES_IN_MS = 10 * 60 * 1000;
 
     public static final String TODAYS_DATE = "todaysdate";
 
@@ -128,24 +131,25 @@ public class StepCounterService extends Service {
 
                 // Add the number of steps previously taken, otherwise the counter would start at 0.
                 // This is needed to keep the counter consistent across rotation changes.
-//                mSteps += mPreviousCounterSteps;
+                // mSteps += mPreviousCounterSteps;
                 final Cursor historyCursor = getContentResolver().query(WalkWithMeProvider.History.CONTENT_URI, null, null, null, FitnessHistory.DATE + " DESC LIMIT 1");
                 final ContentValues contentValues = new ContentValues();
                 android.util.Log.d(LOG_TAG, "cursor = " + historyCursor + "numOfSteps = " + mSteps);
                 if (historyCursor != null && historyCursor.moveToNext() && mSteps > 0) {
 
                     final long timeOfPrevRecord = historyCursor.getLong(historyCursor.getColumnIndex(FitnessHistory.DATE));
-                    // All steps which are done with intervals less then one minute should be in one section
+                    // All steps which are done with interval less then ten minutes should be in one section
                     int newNumOfSteps = considerPreviousActivity(historyCursor, mSteps);
                     contentValues.put(FitnessHistory.NUM_OF_STEPS, newNumOfSteps);
                     contentValues.put(FitnessHistory.DATE, System.currentTimeMillis());
-                    if (System.currentTimeMillis() - timeOfPrevRecord < ONE_MINUTE_IN_MS) {
+                    if (System.currentTimeMillis() - timeOfPrevRecord < TEN_MINUTES_IN_MS) {
                         android.util.Log.d(LOG_TAG, "update = " + newNumOfSteps);
                         getContentResolver().update(WalkWithMeProvider.History.CONTENT_URI, contentValues, FitnessHistory.DATE + " = " + timeOfPrevRecord, null);
                     } else {
                         android.util.Log.d(LOG_TAG, "insert1 = " + newNumOfSteps);
                         getContentResolver().insert(WalkWithMeProvider.History.CONTENT_URI, contentValues);
                     }
+                    syncWidget();
                     sendDataToFirebase();
                 } else if (mSteps > 0) {
                     android.util.Log.d(LOG_TAG, "insert2 = " + mSteps);
@@ -159,6 +163,12 @@ public class StepCounterService extends Service {
 
             }
 
+        }
+
+        private void syncWidget() {
+            // Setting the package ensures that only components in our app will receive the broadcast
+            Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED).setPackage(getPackageName());
+            sendBroadcast(dataUpdatedIntent);
         }
 
         private void sendDataToFirebase() {

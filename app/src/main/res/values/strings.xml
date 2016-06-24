@@ -10,6 +10,7 @@
     <string name="nav_item_settings">Preferences</string>
 
     <string name="step_counter_title">%1$d steps</string>
+    <string name="no_steps_yet">No steps yet detected</string>
 
     <string name="pref_name_key" translatable="false">pref_name</string>
     <string name="pref_uid_key" translatable="false">pref_uid</string>
@@ -40,5 +41,8 @@
     <string name="date_today">Today</string>
     <string name="date_yesterday">Yesterday</string>
     <string name="pref_name_title">Your name</string>
-    <string name="pref_name_summary"></string>
+
+    <string name="title_widget_today">Walks Today</string>
+    <!-- A11y -->
+    <string name="my_history_by_day_main_image_a11y">Motivation image to start walking</string>
 </resources>

@@ -71,6 +71,7 @@ public class MyFriendsAdapter extends RecyclerView.Adapter<MyFriendsAdapter.Frie
         cursor.moveToPosition(position);
         holder.name.setText(cursor.getString(FriendsFragment.COL_NAME));
         holder.stepsCount.setText(holder.stepsCount.getContext().getString(R.string.step_counter_title, cursor.getLong(FriendsFragment.COL_SUM_STEPS)));
+        holder.photo.setContentDescription(cursor.getString(FriendsFragment.COL_NAME));
         Glide.with(holder.photo.getContext())
                 .load(cursor.getString(FriendsFragment.COL_PHOTO))
                 .bitmapTransform(new CropCircleTransformation(holder.photo.getContext()))

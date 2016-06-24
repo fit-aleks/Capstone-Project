@@ -155,6 +155,7 @@ public class FriendsDetailsFragment extends Fragment implements LoaderManager.Lo
             if (!data.moveToFirst()) {
                 return;
             }
+            this.photo.setContentDescription(data.getString(data.getColumnIndex(Friends.FRIEND_NAME)));
             Glide.with(getContext())
                     .load(data.getString(data.getColumnIndex(Friends.PHOTO)))
                     .bitmapTransform(new CropCircleTransformation(getContext()))
